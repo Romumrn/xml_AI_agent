@@ -1,0 +1,546 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BioSampleSet>
+<BioSampleSet>
+<BioSample submission_date="2008-04-04T08:44:24.950" last_update="2022-09-25T02:00:02.729" publication_date="2008-04-04T00:00:00.000" access="public" id="2" accession="SAMN00000002">
+  <Ids>
+    <Id db="BioSample" is_primary="1">SAMN00000002</Id>
+    <Id db="WUGSC" db_label="Sample name">19655</Id>
+    <Id db="SRA">SRS000002</Id>
+  </Ids>
+  <Description>
+    <Title>Alistipes putredinis DSM 17216</Title>
+    <Organism taxonomy_id="445970" taxonomy_name="Alistipes putredinis DSM 17216"/>
+    <Comment>
+      <Paragraph>Alistipes putredinis (GenBank Accession Number for 16S rDNA gene: L16497) is a member of the Bacteroidetes division of the domain bacteria and has been isolated from human feces. It has been found in 16S rDNA sequence-based enumerations of the colonic microbiota of adult humans (Eckburg et. al. (2005), Ley et. al. (2006)). </Paragraph>
+      <Paragraph>Keywords: GSC:MIxS;MIGS:6.0</Paragraph>
+    </Comment>
+  </Description>
+  <Owner>
+    <Name abbreviation="WUGSC">Washington University, Genome Sequencing Center</Name>
+    <Contacts>
+      <Contact/>
+    </Contacts>
+  </Owner>
+  <Models>
+    <Model>MIGS.ba</Model>
+  </Models>
+  <Package display_name="MIGS: cultured bacteria/archaea; version 6.0">MIGS.ba.6.0</Package>
+  <Attributes>
+    <Attribute attribute_name="finishing strategy (depth of coverage)">Level 3: Improved-High-Quality Draft11.6x;20</Attribute>
+    <Attribute attribute_name="collection date" harmonized_name="collection_date" display_name="collection date">not determined</Attribute>
+    <Attribute attribute_name="estimated_size" harmonized_name="estimated_size" display_name="estimated size">2550000</Attribute>
+    <Attribute attribute_name="sop">http://hmpdacc.org/doc/CommonGeneAnnotation_SOP.pdf</Attribute>
+    <Attribute attribute_name="project_type">Reference Genome</Attribute>
+    <Attribute attribute_name="host" harmonized_name="host" display_name="host">Homo sapiens</Attribute>
+    <Attribute attribute_name="lat_lon" harmonized_name="lat_lon" display_name="latitude and longitude">not determined</Attribute>
+    <Attribute attribute_name="biome" harmonized_name="env_broad_scale" display_name="broad-scale environmental context">terrestrial biome [ENVO:00000446]</Attribute>
+    <Attribute attribute_name="misc_param: HMP body site">not determined</Attribute>
+    <Attribute attribute_name="nucleic acid extraction">not determined</Attribute>
+    <Attribute attribute_name="feature" harmonized_name="env_local_scale" display_name="local-scale environmental context">human-associated habitat [ENVO:00009003]</Attribute>
+    <Attribute attribute_name="investigation_type" harmonized_name="investigation_type" display_name="investigation type">missing</Attribute>
+    <Attribute attribute_name="host taxid" harmonized_name="host_taxid" display_name="host taxonomy ID">9606</Attribute>
+    <Attribute attribute_name="project_name" harmonized_name="project_name" display_name="project name">Alistipes putredinis DSM 17216</Attribute>
+    <Attribute attribute_name="assembly">PCAP</Attribute>
+    <Attribute attribute_name="location">Mt Washington</Attribute>
+    <Attribute attribute_name="geo_loc_name" harmonized_name="geo_loc_name" display_name="geographic location">not determined</Attribute>
+    <Attribute attribute_name="source_mat_id" harmonized_name="source_material_id" display_name="source material identifiers">DSM 17216, CCUG 45780, CIP 104286, ATCC 29800, Carlier 10203, VPI 3293</Attribute>
+    <Attribute attribute_name="material" harmonized_name="env_medium" display_name="environmental medium">biological product [ENVO:02000043]</Attribute>
+    <Attribute attribute_name="ref_biomaterial" harmonized_name="ref_biomaterial" display_name="reference for biomaterial">not determined</Attribute>
+    <Attribute attribute_name="misc_param: HMP supersite">gastrointestinal_tract</Attribute>
+    <Attribute attribute_name="num_replicons" harmonized_name="num_replicons" display_name="number of replicons">not determined</Attribute>
+    <Attribute attribute_name="sequencing method">454-GS20, Sanger</Attribute>
+    <Attribute attribute_name="isol_growth_condt" harmonized_name="isol_growth_condt" display_name="isolation and growth condition">not determined</Attribute>
+    <Attribute attribute_name="env_package" harmonized_name="env_package" display_name="environmental package">missing</Attribute>
+    <Attribute attribute_name="strain" harmonized_name="strain" display_name="strain">DSM 17216</Attribute>
+    <Attribute attribute_name="isolation-source" harmonized_name="isolation_source" display_name="isolation source">missing</Attribute>
+    <Attribute attribute_name="type-material">type strain of Bacteroides putredinis</Attribute>
+  </Attributes>
+  <Links>
+    <Link type="url" label="DNA Source">http://www.dsmz.de/catalogues/details/culture/DSM-17216</Link>
+    <Link type="entrez" target="bioproject">19655</Link>
+  </Links>
+  <Status status="live" when="2013-08-05T10:18:49"/>
+</BioSample>
+
+<BioSample submission_date="2011-02-24T14:12:13.853" last_update="2024-04-07T02:00:02.101" publication_date="2008-04-04T00:00:00.000" access="public" id="8" accession="SAMN00000008">
+  <Ids>
+    <Id db="BioSample" is_primary="1">SAMN00000008</Id>
+    <Id db="WUGSC" db_label="Sample name">18155</Id>
+    <Id db="SRA">SRS000008</Id>
+  </Ids>
+  <Description>
+    <Title>MIGS Cultured Bacterial/Archaeal sample from Dorea formicigenerans ATCC 27755</Title>
+    <Organism taxonomy_id="411461" taxonomy_name="Dorea formicigenerans ATCC 27755"/>
+    <Comment>
+      <Paragraph>Dorea formicigenerans (GenBank Accession Number for 16S rRNA gene: L34619) is a member of the Firmicutes division of the domain bacteria. In one comprehensive 16S rDNA sequence- based enumeration of the colonic microbiota of three healthy adult humans, it represents, on average, 0.617% of all 16S rDNA sequences and 1.215% of the sequences in its division (Eckburg et. al. (2005)).</Paragraph>
+      <Paragraph>Keywords: GSC:MIxS;MIGS:6.0</Paragraph>
+    </Comment>
+  </Description>
+  <Owner>
+    <Name abbreviation="WUGSC">Washington University, Genome Sequencing Center</Name>
+  </Owner>
+  <Models>
+    <Model>MIGS.ba</Model>
+  </Models>
+  <Package display_name="MIGS: cultured bacteria/archaea; version 6.0">MIGS.ba.6.0</Package>
+  <Attributes>
+    <Attribute attribute_name="finishing strategy (depth of coverage)">Level 3: Improved-High-Quality Draft7.5x;16</Attribute>
+    <Attribute attribute_name="collection date" harmonized_name="collection_date" display_name="collection date">not determined</Attribute>
+    <Attribute attribute_name="estimated_size" harmonized_name="estimated_size" display_name="estimated size">3186000</Attribute>
+    <Attribute attribute_name="sop">http://hmpdacc.org/doc/CommonGeneAnnotation_SOP.pdf</Attribute>
+    <Attribute attribute_name="project_type">Reference Genome</Attribute>
+    <Attribute attribute_name="host" harmonized_name="host" display_name="host">Homo sapiens</Attribute>
+    <Attribute attribute_name="lat_lon" harmonized_name="lat_lon" display_name="latitude and longitude">not determined</Attribute>
+    <Attribute attribute_name="biome" harmonized_name="env_broad_scale" display_name="broad-scale environmental context">terrestrial biome [ENVO:00000446]</Attribute>
+    <Attribute attribute_name="misc_param: HMP body site">not determined</Attribute>
+    <Attribute attribute_name="nucleic acid extraction">not determined</Attribute>
+    <Attribute attribute_name="feature" harmonized_name="env_local_scale" display_name="local-scale environmental context">human-associated habitat [ENVO:00009003]</Attribute>
+    <Attribute attribute_name="investigation_type" harmonized_name="investigation_type" display_name="investigation type">missing</Attribute>
+    <Attribute attribute_name="host taxid" harmonized_name="host_taxid" display_name="host taxonomy ID">9606</Attribute>
+    <Attribute attribute_name="project_name" harmonized_name="project_name" display_name="project name">Dorea formicigenerans ATCC 27755</Attribute>
+    <Attribute attribute_name="assembly">PCAP</Attribute>
+    <Attribute attribute_name="geo_loc_name" harmonized_name="geo_loc_name" display_name="geographic location">not determined</Attribute>
+    <Attribute attribute_name="source_mat_id" harmonized_name="source_material_id" display_name="source material identifiers">ATCC 27755</Attribute>
+    <Attribute attribute_name="material" harmonized_name="env_medium" display_name="environmental medium">biological product [ENVO:02000043]</Attribute>
+    <Attribute attribute_name="ref_biomaterial" harmonized_name="ref_biomaterial" display_name="reference for biomaterial">not determined</Attribute>
+    <Attribute attribute_name="misc_param: HMP supersite">gastrointestinal_tract</Attribute>
+    <Attribute attribute_name="num_replicons" harmonized_name="num_replicons" display_name="number of replicons">not determined</Attribute>
+    <Attribute attribute_name="sequencing method">454, Sanger</Attribute>
+    <Attribute attribute_name="isol_growth_condt" harmonized_name="isol_growth_condt" display_name="isolation and growth condition">not determined</Attribute>
+    <Attribute attribute_name="env_package" harmonized_name="env_package" display_name="environmental package">missing</Attribute>
+    <Attribute attribute_name="isolation-source" harmonized_name="isolation_source" display_name="isolation source">missing</Attribute>
+    <Attribute attribute_name="strain" harmonized_name="strain" display_name="strain">ATCC 27755</Attribute>
+    <Attribute attribute_name="type-material">type strain of Eubacterium formicigenerans</Attribute>
+  </Attributes>
+  <Links>
+    <Link type="url" label="DNA Source">http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=27755&amp;Template=bacteria</Link>
+    <Link type="entrez" target="bioproject">18155</Link>
+  </Links>
+  <Status status="live" when="2013-08-05T10:18:49"/>
+</BioSample>
+<BioSample submission_date="2008-04-04T08:45:30.637" last_update="2013-06-12T08:41:57.493" publication_date="2008-04-04T08:45:31.213" access="public" id="88" accession="SAMN00000088">
+  <Ids>
+    <Id db="BioSample" is_primary="1">SAMN00000088</Id>
+    <Id db="PML" db_label="Sample name">Time1-Bag1-DNA</Id>
+    <Id db="SRA">SRS000294</Id>
+  </Ids>
+  <Description>
+    <Title>Generic sample from marine metagenome</Title>
+    <Organism taxonomy_id="408172" taxonomy_name="marine metagenome"/>
+    <Comment>
+      <Paragraph>Ocean acidification conditions bag from May 13th 2006. This was taken during the peak of the bloom.
+    </Paragraph>
+    </Comment>
+  </Description>
+  <Owner>
+    <Name abbreviation="PML">Plymouth Marine Laboratory</Name>
+  </Owner>
+  <Models>
+    <Model>Generic</Model>
+  </Models>
+  <Package display_name="Generic">Generic.1.0</Package>
+  <Attributes>
+    <Attribute attribute_name="Collection place">Norwegian fjord</Attribute>
+    <Attribute attribute_name="Longitude">60 16' 10'' N</Attribute>
+    <Attribute attribute_name="Latitude">5 13' 20'' E</Attribute>
+    <Attribute attribute_name="Salinity" unit="psu" harmonized_name="salinity" display_name="salinity">31.4</Attribute>
+    <Attribute attribute_name="Temperature" unit="degrees Celsius" harmonized_name="temp" display_name="temperature">9.7</Attribute>
+    <Attribute attribute_name="Nitrate" unit="micromol N l-1" harmonized_name="nitrate" display_name="nitrate">7.53</Attribute>
+    <Attribute attribute_name="Phosphate" unit="micromol N l-1" harmonized_name="phosphate" display_name="phosphate">0.23</Attribute>
+    <Attribute attribute_name="pCO2 concentrations" unit="microatm">450</Attribute>
+  </Attributes>
+  <Status status="live" when="2008-04-04T08:45:30.637"/>
+</BioSample>
+<BioSample access="public" publication_date="2025-03-23T00:00:00.000" last_update="2025-03-23T17:01:05.343" submission_date="2025-03-23T16:27:06.847" id="47540446" accession="SAMN47540446">
+  <Ids>
+    <Id db="BioSample" is_primary="1">SAMN47540446</Id>
+    <Id db_label="Sample name">D92</Id>
+  </Ids>
+  <Description>
+    <Title>MIGS Cultured Bacterial/Archaeal sample from Acinetobacter baumannii</Title>
+    <Organism taxonomy_id="470" taxonomy_name="Acinetobacter baumannii">
+      <OrganismName>Acinetobacter baumannii</OrganismName>
+    </Organism>
+    <Comment>
+      <Paragraph>Keywords: GSC:MIxS;MIGS:6.0</Paragraph>
+    </Comment>
+  </Description>
+  <Owner>
+    <Name>KAUST</Name>
+    <Contacts>
+      <Contact>
+        <Name>
+          <First>Danesh</First>
+          <Last>Moradigaravand</Last>
+        </Name>
+      </Contact>
+    </Contacts>
+  </Owner>
+  <Models>
+    <Model>MIGS.ba</Model>
+  </Models>
+  <Package display_name="MIGS: cultured bacteria/archaea; version 6.0">MIGS.ba.6.0</Package>
+  <Attributes>
+    <Attribute attribute_name="strain" harmonized_name="strain" display_name="strain">not applicable</Attribute>
+    <Attribute attribute_name="collection_date" harmonized_name="collection_date" display_name="collection date">2022-04-29</Attribute>
+    <Attribute attribute_name="env_broad_scale" harmonized_name="env_broad_scale" display_name="broad-scale environmental context">not applicable</Attribute>
+    <Attribute attribute_name="env_local_scale" harmonized_name="env_local_scale" display_name="local-scale environmental context">not applicable</Attribute>
+    <Attribute attribute_name="env_medium" harmonized_name="env_medium" display_name="environmental medium">not applicable</Attribute>
+    <Attribute attribute_name="geo_loc_name" harmonized_name="geo_loc_name" display_name="geographic location">Saudi Arabia</Attribute>
+    <Attribute attribute_name="isol_growth_condt" harmonized_name="isol_growth_condt" display_name="isolation and growth condition">not applicable</Attribute>
+    <Attribute attribute_name="lat_lon" harmonized_name="lat_lon" display_name="latitude and longitude">not applicable</Attribute>
+    <Attribute attribute_name="num_replicons" harmonized_name="num_replicons" display_name="number of replicons">not applicable</Attribute>
+    <Attribute attribute_name="ref_biomaterial" harmonized_name="ref_biomaterial" display_name="reference for biomaterial">not applicable</Attribute>
+  </Attributes>
+  <Links>
+    <Link type="entrez" target="bioproject" label="PRJNA1240816">1240816</Link>
+  </Links>
+  <Status status="live" when="2025-03-23T16:27:06.846"/>
+</BioSample>
+<BioSample submission_date="2008-04-04T08:45:30.637" last_update="2013-06-12T08:41:57.607" publication_date="2008-04-04T08:45:31.213" access="public" id="89" accession="SAMN00000089">
+  <Ids>
+    <Id db="BioSample" is_primary="1">SAMN00000089</Id>
+    <Id db="PML" db_label="Sample name">Time1-Bag6-DNA</Id>
+    <Id db="SRA">SRS000295</Id>
+  </Ids>
+  <Description>
+    <Title>Generic sample from marine metagenome</Title>
+    <Organism taxonomy_id="408172" taxonomy_name="marine metagenome"/>
+    <Comment>
+      <Paragraph>Control conditions bag from May 13th 2006. This was taken during the peak of the bloom.
+    </Paragraph>
+    </Comment>
+  </Description>
+  <Owner>
+    <Name abbreviation="PML">Plymouth Marine Laboratory</Name>
+  </Owner>
+  <Models>
+    <Model>Generic</Model>
+  </Models>
+  <Package display_name="Generic">Generic.1.0</Package>
+  <Attributes>
+    <Attribute attribute_name="Collection place">Norwegian fjord</Attribute>
+    <Attribute attribute_name="Longitude">60 16' 10'' N</Attribute>
+    <Attribute attribute_name="Latitude">5 13' 20'' E</Attribute>
+    <Attribute attribute_name="Salinity" unit="psu" harmonized_name="salinity" display_name="salinity">31.475</Attribute>
+    <Attribute attribute_name="pCO2 concentrations" unit="microatm">221</Attribute>
+    <Attribute attribute_name="Temperature" unit="degrees Celsius" harmonized_name="temp" display_name="temperature">9.65</Attribute>
+    <Attribute attribute_name="Nitrate" unit="micromol N l-1" harmonized_name="nitrate" display_name="nitrate">3.84</Attribute>
+    <Attribute attribute_name="Phosphate" unit="micromol N l-1" harmonized_name="phosphate" display_name="phosphate">0.19</Attribute>
+  </Attributes>
+  <Status status="live" when="2012-11-02T09:09:09.557"/>
+</BioSample>
+<BioSample submission_date="2008-04-04T08:45:30.637" last_update="2013-06-12T08:42:34.273" publication_date="2008-04-04T08:45:31.213" access="public" id="94" accession="SAMN00000094">
+  <Ids>
+    <Id db="BioSample" is_primary="1">SAMN00000094</Id>
+    <Id db="PML" db_label="Sample name">Time2-Bag1-mRNA</Id>
+    <Id db="SRA">SRS000300</Id>
+  </Ids>
+  <Description>
+    <Title>Generic sample from marine metagenome</Title>
+    <Organism taxonomy_id="408172" taxonomy_name="marine metagenome"/>
+    <Comment>
+      <Paragraph>Ocean acidification conditions bag from May 19th 2006. This was taken following the decline of the bloom.
+    </Paragraph>
+    </Comment>
+  </Description>
+  <Owner>
+    <Name abbreviation="PML">Plymouth Marine Laboratory</Name>
+  </Owner>
+  <Models>
+    <Model>Generic</Model>
+  </Models>
+  <Package display_name="Generic">Generic.1.0</Package>
+  <Attributes>
+    <Attribute attribute_name="Collection place">Norwegian fjord</Attribute>
+    <Attribute attribute_name="Longitude">60 16' 10'' N</Attribute>
+    <Attribute attribute_name="Latitude">5 13' 20'' E</Attribute>
+    <Attribute attribute_name="pCO2 concentrations" unit="microatm">621</Attribute>
+    <Attribute attribute_name="Salinity" unit="psu" harmonized_name="salinity" display_name="salinity">31.5</Attribute>
+    <Attribute attribute_name="Temperature" unit="degrees Celsius" harmonized_name="temp" display_name="temperature">9</Attribute>
+    <Attribute attribute_name="Nitrate" unit="micromol N l-1" harmonized_name="nitrate" display_name="nitrate">3.94</Attribute>
+    <Attribute attribute_name="Phosphate" unit="micromol N l-1" harmonized_name="phosphate" display_name="phosphate">0.20</Attribute>
+  </Attributes>
+  <Status status="live" when="2012-11-02T09:09:09.617"/>
+</BioSample>
+<BioSample submission_date="2009-09-23T16:10:17.343" last_update="2013-06-12T08:50:33.360" publication_date="2009-11-18T15:41:51.923" access="public" id="3202" accession="SAMN00003202">
+  <Ids>
+    <Id db="BioSample" is_primary="1">SAMN00003202</Id>
+    <Id db="Cornell" db_label="Sample name">Mo17</Id>
+    <Id db="SRA">SRS005489</Id>
+  </Ids>
+  <Description>
+    <Title>Generic sample from Zea mays</Title>
+    <Organism taxonomy_id="4577" taxonomy_name="Zea mays"/>
+    <Comment>
+      <Paragraph>Maize inbred line Mo17.  This line is the second parent (with B73) of the maize mapping population referred to as IBM.</Paragraph>
+    </Comment>
+  </Description>
+  <Owner>
+    <Name abbreviation="Cornell">Cornell University</Name>
+    <Contacts>
+      <Contact lab="Buckler Lab"/>
+    </Contacts>
+  </Owner>
+  <Models>
+    <Model>Generic</Model>
+  </Models>
+  <Package display_name="Generic">Generic.1.0</Package>
+  <Attributes/>
+  <Status status="live" when="2012-11-01T14:35:25.717"/>
+</BioSample>
+<BioSample submission_date="2008-04-18T19:31:02.870" last_update="2021-02-28T02:00:03.933" publication_date="2008-04-18T00:00:00.000" access="public" id="125" accession="SAMN00000125">
+  <Ids>
+    <Id db="BioSample" is_primary="1">SAMN00000125</Id>
+    <Id db="SDSU" db_label="Sample name">17771</Id>
+    <Id db="SRA">SRS000358</Id>
+  </Ids>
+  <Description>
+    <Title>Generic sample from marine metagenome</Title>
+    <Organism taxonomy_id="408172" taxonomy_name="marine metagenome"/>
+    <Comment>
+      <Paragraph>viral fraction from Sargasso Sea </Paragraph>
+    </Comment>
+  </Description>
+  <Owner>
+    <Name abbreviation="SDSU">San Diego State University</Name>
+  </Owner>
+  <Models>
+    <Model>Generic</Model>
+  </Models>
+  <Package display_name="Generic">Generic.1.0</Package>
+  <Attributes>
+    <Attribute attribute_name="collection_date" harmonized_name="collection_date" display_name="collection date">2005-06-30</Attribute>
+    <Attribute attribute_name="lat_lon" harmonized_name="lat_lon" display_name="latitude and longitude">32.167 N 64.50 W</Attribute>
+    <Attribute attribute_name="clone-lib" harmonized_name="clone_lib" display_name="clone lib">SARVir063005</Attribute>
+    <Attribute attribute_name="isolation-source" harmonized_name="isolation_source" display_name="isolation source">viral fraction from Sargasso Sea</Attribute>
+  </Attributes>
+  <Status status="live" when="2008-04-18T19:31:02.870"/>
+</BioSample>
+<BioSample submission_date="2008-10-01T10:12:26.060" last_update="2013-06-12T08:42:43.663" publication_date="2011-02-17T13:34:31.193" access="public" id="676" accession="SAMN00000676">
+  <Ids>
+    <Id db="BioSample" is_primary="1">SAMN00000676</Id>
+    <Id db="University of Hawaii" db_label="Sample name">skaftaDNA</Id>
+    <Id db="SRA">SRS000970</Id>
+  </Ids>
+  <Description>
+    <Title>Generic sample from uncultured bacterium</Title>
+    <Organism taxonomy_id="77133" taxonomy_name="uncultured bacterium"/>
+    <Comment>
+      <Paragraph>400 ml water sample collected from 3 m above the lake bed (112 m below the ice-water interface) and filtered onto 0.2-micron 25 mm filter from which DNA was extracted.</Paragraph>
+    </Comment>
+  </Description>
+  <Owner>
+    <Name abbreviation="">University of Hawaii</Name>
+    <Contacts>
+      <Contact>
+        <Name>
+          <First>Eric</First>
+          <Last>Gaidos</Last>
+        </Name>
+      </Contact>
+    </Contacts>
+  </Owner>
+  <Models>
+    <Model>Generic</Model>
+  </Models>
+  <Package display_name="Generic">Generic.1.0</Package>
+  <Attributes>
+    <Attribute attribute_name="latitude">64.48</Attribute>
+    <Attribute attribute_name="longitude">-17.92</Attribute>
+  </Attributes>
+  <Status status="live" when="2011-02-17T13:34:31.217"/>
+</BioSample>
+<BioSample access="public" publication_date="2025-03-23T00:00:00.000" last_update="2025-03-23T23:18:04.333" submission_date="2025-03-23T23:18:04.333" id="47541546" accession="SAMN47541546">
+  <Ids>
+    <Id db="BioSample" is_primary="1">SAMN47541546</Id>
+    <Id db_label="Sample name">76</Id>
+  </Ids>
+  <Description>
+    <Title>Metagenomic Sequencing of Blood Virome: The pool sample of healthy plasma from 76 paried with PBMC sample 3269</Title>
+    <Organism taxonomy_id="2489051" taxonomy_name="human viral metagenome">
+      <OrganismName>human viral metagenome</OrganismName>
+    </Organism>
+    <Comment>
+      <Paragraph>The pool sample of healthy plasma from 76 paried with PBMC sample 3269</Paragraph>
+    </Comment>
+  </Description>
+  <Owner>
+    <Name>Chinese Academy of Medical Sciences &amp; Peking Union Medical College</Name>
+    <Contacts>
+      <Contact>
+        <Name>
+          <First>Peng</First>
+          <Last>Zhao</Last>
+        </Name>
+      </Contact>
+    </Contacts>
+  </Owner>
+  <Models>
+    <Model>Metagenome or environmental</Model>
+  </Models>
+  <Package display_name="Metagenome or environmental; version 1.0">Metagenome.environmental.1.0</Package>
+  <Attributes>
+    <Attribute attribute_name="host" harmonized_name="host" display_name="host">Homo sapiens</Attribute>
+    <Attribute attribute_name="isolation_source" harmonized_name="isolation_source" display_name="isolation source">="healthy plasma "&amp;A63</Attribute>
+    <Attribute attribute_name="collection_date" harmonized_name="collection_date" display_name="collection date">2017-01-01</Attribute>
+    <Attribute attribute_name="geo_loc_name" harmonized_name="geo_loc_name" display_name="geographic location">missing</Attribute>
+    <Attribute attribute_name="lat_lon" harmonized_name="lat_lon" display_name="latitude and longitude">missing</Attribute>
+  </Attributes>
+  <Links>
+    <Link type="entrez" target="bioproject" label="PRJNA1240009">1240009</Link>
+  </Links>
+  <Status status="live" when="2025-03-23T23:18:04.333"/>
+</BioSample>
+<BioSample access="public" publication_date="2025-03-23T00:00:00.000" last_update="2025-03-23T07:01:06.683" submission_date="2025-03-23T06:36:04.420" id="47538138" accession="SAMN47538138">
+  <Ids>
+    <Id db="BioSample" is_primary="1">SAMN47538138</Id>
+    <Id db_label="Sample name">Janthinobacterium lividum</Id>
+    <Id db="SRA">SRS24457954</Id>
+  </Ids>
+  <Description>
+    <Title>Direct Submission</Title>
+    <Organism taxonomy_id="29580" taxonomy_name="Janthinobacterium">
+      <OrganismName>Janthinobacterium</OrganismName>
+    </Organism>
+  </Description>
+  <Owner>
+    <Name>Zhengzhou University of Light Industry</Name>
+    <Contacts>
+      <Contact>
+        <Name>
+          <First>Peixin</First>
+          <Last>He</Last>
+        </Name>
+      </Contact>
+    </Contacts>
+  </Owner>
+  <Models>
+    <Model>Microbe, viral or environmental</Model>
+  </Models>
+  <Package display_name="Microbe; version 1.0">Microbe.1.0</Package>
+  <Attributes>
+    <Attribute attribute_name="strain" harmonized_name="strain" display_name="strain">Janthinobacterium.spQD20240621</Attribute>
+    <Attribute attribute_name="isolate" harmonized_name="isolate" display_name="isolate">A bacteria that can boost yield, isolated from the interior of morel mushrooms</Attribute>
+    <Attribute attribute_name="host" harmonized_name="host" display_name="host">morchella</Attribute>
+    <Attribute attribute_name="isolation_source" harmonized_name="isolation_source" display_name="isolation source">china</Attribute>
+    <Attribute attribute_name="collection_date" harmonized_name="collection_date" display_name="collection date">2024-06-21</Attribute>
+    <Attribute attribute_name="geo_loc_name" harmonized_name="geo_loc_name" display_name="geographic location">China</Attribute>
+    <Attribute attribute_name="sample_type" harmonized_name="sample_type" display_name="sample type">tissue sample</Attribute>
+  </Attributes>
+  <Links>
+    <Link type="entrez" target="bioproject" label="PRJNA1240705">1240705</Link>
+  </Links>
+  <Status status="live" when="2025-03-23T06:36:04.421"/>
+</BioSample>
+<BioSample access="public" publication_date="2025-03-22T00:00:00.000" last_update="2025-03-21T23:08:31.000" submission_date="2025-03-23T08:10:57.116" id="47538219" accession="SAMEA116090429">
+  <Ids>
+    <Id db="BioSample" is_primary="1">SAMEA116090429</Id>
+    <Id db="SRA">ERS21088509</Id>
+  </Ids>
+  <Description>
+    <Title>P110-2_4</Title>
+    <Organism taxonomy_id="9606" taxonomy_name="Homo sapiens">
+      <OrganismName>Homo sapiens</OrganismName>
+    </Organism>
+    <Comment>
+      <Paragraph>human-HPV</Paragraph>
+    </Comment>
+  </Description>
+  <Owner>
+    <Name>EBI</Name>
+  </Owner>
+  <Models>
+    <Model>Generic</Model>
+  </Models>
+  <Package display_name="Generic">Generic.1.0</Package>
+  <Attributes>
+    <Attribute attribute_name="ENA first public">2025-03-22</Attribute>
+    <Attribute attribute_name="ENA-CHECKLIST">ERC000011</Attribute>
+    <Attribute attribute_name="INSDC center name">MRC-University of Glasgow Centre for Virus Research</Attribute>
+    <Attribute attribute_name="INSDC status">public</Attribute>
+    <Attribute attribute_name="Submitter Id">AF-HPV5</Attribute>
+    <Attribute attribute_name="collection date" harmonized_name="collection_date" display_name="collection date">2024</Attribute>
+    <Attribute attribute_name="common name">human</Attribute>
+    <Attribute attribute_name="geographic location (country and/or sea)" harmonized_name="geo_loc_name" display_name="geographic location">United Kingdom</Attribute>
+    <Attribute attribute_name="sample name" harmonized_name="sample_name" display_name="sample name">AF-HPV5</Attribute>
+    <Attribute attribute_name="scientific_name">Homo sapiens</Attribute>
+  </Attributes>
+  <Status status="live" when="2025-03-24T08:07:18"/>
+</BioSample>
+<BioSample access="public" publication_date="2025-03-22T00:00:00.000" last_update="2025-03-21T23:04:16.000" submission_date="2025-03-23T08:10:57.136" id="47538220" accession="SAMEA112824473">
+  <Ids>
+    <Id db="BioSample" is_primary="1">SAMEA112824473</Id>
+    <Id db="SRA">ERS14832009</Id>
+  </Ids>
+  <Description>
+    <Title>T109</Title>
+    <Organism taxonomy_id="410658" taxonomy_name="soil metagenome">
+      <OrganismName>soil metagenome</OrganismName>
+    </Organism>
+    <Comment>
+      <Paragraph>K35</Paragraph>
+    </Comment>
+  </Description>
+  <Owner>
+    <Name>EBI</Name>
+  </Owner>
+  <Models>
+    <Model>Generic</Model>
+  </Models>
+  <Package display_name="Generic">Generic.1.0</Package>
+  <Attributes>
+    <Attribute attribute_name="ENA first public">2025-03-22</Attribute>
+    <Attribute attribute_name="ENA-CHECKLIST">ERC000011</Attribute>
+    <Attribute attribute_name="External Id">SAMEA112824473</Attribute>
+    <Attribute attribute_name="INSDC center name">Quadram Institute Bioscience</Attribute>
+    <Attribute attribute_name="INSDC last update">2023-03-22T15:33:36Z</Attribute>
+    <Attribute attribute_name="INSDC status">public</Attribute>
+    <Attribute attribute_name="Submitter Id">T109</Attribute>
+    <Attribute attribute_name="collection_date" harmonized_name="collection_date" display_name="collection date">2021-06</Attribute>
+    <Attribute attribute_name="environmental medium" harmonized_name="env_medium" display_name="environmental medium">Soil</Attribute>
+    <Attribute attribute_name="geographic location (country and/or sea)" harmonized_name="geo_loc_name" display_name="geographic location">Sweden</Attribute>
+    <Attribute attribute_name="geographic location (latitude)">58.501488994807</Attribute>
+    <Attribute attribute_name="geographic location (longitude)">12.9334050044417</Attribute>
+    <Attribute attribute_name="project name" harmonized_name="project_name" display_name="project name">Legacy_TRS</Attribute>
+    <Attribute attribute_name="sample name" harmonized_name="sample_name" display_name="sample name">T109</Attribute>
+    <Attribute attribute_name="scientific_name">soil metagenome</Attribute>
+  </Attributes>
+  <Status status="live" when="2025-03-24T08:07:18"/>
+</BioSample>
+<BioSample access="public" publication_date="2025-03-22T00:00:00.000" last_update="2025-03-21T23:09:02.000" submission_date="2025-03-23T08:10:57.160" id="47538221" accession="SAMEA117847720">
+  <Ids>
+    <Id db="BioSample" is_primary="1">SAMEA117847720</Id>
+    <Id db="SRA">ERS23837399</Id>
+  </Ids>
+  <Description>
+    <Title>Russia_BA_Irkutsk</Title>
+    <Organism taxonomy_id="9606" taxonomy_name="Homo sapiens">
+      <OrganismName>Homo sapiens</OrganismName>
+    </Organism>
+    <Comment>
+      <Paragraph>ancient dna sample</Paragraph>
+    </Comment>
+  </Description>
+  <Owner>
+    <Name>EBI</Name>
+  </Owner>
+  <Models>
+    <Model>Generic</Model>
+  </Models>
+  <Package display_name="Generic">Generic.1.0</Package>
+  <Attributes>
+    <Attribute attribute_name="ENA first public">2025-03-22</Attribute>
+    <Attribute attribute_name="ENA-CHECKLIST">ERC000011</Attribute>
+    <Attribute attribute_name="INSDC center name">HARVARD MEDICAL SCHOOL, DEPARTMENT OF GENETICS</Attribute>
+    <Attribute attribute_name="INSDC status">public</Attribute>
+    <Attribute attribute_name="Submitter Id">I5280</Attribute>
+    <Attribute attribute_name="collection date" harmonized_name="collection_date" display_name="collection date">2025</Attribute>
+    <Attribute attribute_name="common name">human</Attribute>
+    <Attribute attribute_name="geographic location (country and/or sea)" harmonized_name="geo_loc_name" display_name="geographic location">Russia</Attribute>
+    <Attribute attribute_name="sample name" harmonized_name="sample_name" display_name="sample name">I5280</Attribute>
+    <Attribute attribute_name="scientific_name">Homo sapiens</Attribute>
+  </Attributes>
+  <Status status="live" when="2025-03-24T08:07:18"/>
+</BioSample>
+</BioSampleSet>
