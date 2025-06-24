@@ -1,0 +1,42 @@
+{
+    "HapMap": {
+      "ASW": "African Ancestry in SW USA",
+      "CHD": "Chinese in Metropolitan Denver, CO, USA",
+      "GIH": "Gujarati Indians in Houston, Texas, USA",
+      "CHB": "Han Chinese in Beijing, China",
+      "JPT": "Japanese in Tokyo, Japan",
+      "LWK": "Luhya in Webuye, Kenya",
+      "MKK": "Maasai in Kinyawa, Kenya",
+      "MXL": "Mexican Ancestry in Los Angeles, CA, USA",
+      "TSI": "Toscani in Italia",
+      "YRI": "Yoruba in Ibadan, Nigeria"
+    },
+    "1000Genomes": {
+      "ASW": "African Ancestry in SW USA",
+      "ACB": "African Caribbean in Barbados",
+      "BEB": "Bengali in Bangladesh",
+      "GBR": "British from England and Scotland",
+      "CDX": "Chinese Dai in Xishuangbanna, China",
+      "CLM": "Colombian in Medellín, Colombia",
+      "ESN": "Esan in Nigeria",
+      "FIN": "Finnish in Finland",
+      "GWD": "Gambian in Western Division – Mandinka",
+      "GIH": "Gujarati Indians in Houston, Texas, USA",
+      "CHB": "Han Chinese in Beijing, China",
+      "CHS": "Han Chinese South, China",
+      "IBS": "Iberian populations in Spain",
+      "ITU": "Indian Telugu in the UK",
+      "JPT": "Japanese in Tokyo, Japan",
+      "KHV": "Kinh in Ho Chi Minh City, Vietnam",
+      "LWK": "Luhya in Webuye, Kenya",
+      "MSL": "Mende in Sierra Leone",
+      "MXL": "Mexican Ancestry in Los Angeles CA USA",
+      "PEL": "Peruvian in Lima, Peru",
+      "PUR": "Puerto Rican in Puerto Rico",
+      "PJL": "Punjabi in Lahore, Pakistan",
+      "STU": "Sri Lankan Tamil in the UK",
+      "TSI": "Toscani in Italia",
+      "YRI": "Yoruba in Ibadan, Nigeria"
+    }
+  }
+  
