@@ -7,6 +7,7 @@ import sys
 import json
 import logging
 from typing import Optional, Dict, Any, Tuple
+import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 
 # Configuration du logging
@@ -17,17 +18,19 @@ logger = logging.getLogger(__name__)
 class LocationResult:
     """Classe pour structurer les résultats d'extraction de localisation"""
     accession: str
-    regex_location: Optional[str] = None
-    hapmap_location: Optional[str] = None
+    direct_location: Optional[str] = None  # Fusion de regex et hapmap
+    direct_method: Optional[str] = None    # "regex" ou "hapmap"
     llm_location: Optional[str] = None
     resolved_coordinates: Optional[str] = None
     final_location: Optional[str] = None
     processing_method: Optional[str] = None
+    source_attribute: Optional[str] = None  # Nouvel attribut pour la source XML
 
 class LocationExtractor:
-    def __init__(self, model: str, coord_model: str, hapmap_file: str = "script/hapmap.json"):
+    def __init__(self, model: str, coord_model: str, attr_model: str, hapmap_file: str = "script/hapmap.json"):
         self.model = model
         self.coord_model = coord_model
+        self.attr_model = attr_model  # Nouveau modèle pour l'extraction d'attributs
         self.hapmap_population_info = self._load_hapmap_data(hapmap_file)
         
     def _load_hapmap_data(self, hapmap_file: str) -> Dict:
@@ -256,8 +259,8 @@ class LocationExtractor:
             
         return None
 
-    def extract_coordinates_regex(self, block: str) -> Optional[str]:
-        """Extraction par regex avec patterns améliorés"""
+    def extract_coordinates_regex(self, block: str) -> Tuple[Optional[str], Optional[str]]:
+        """Extraction par regex avec patterns améliorés - retourne (coordonnées, attribut_source)"""
         patterns = [
             # Coordonnées combinées
             (r'<Attribute\s+[^>]*?attribute_name="lat_lon"[^>]*>([^<]+)</Attribute>', None),
@@ -275,6 +278,9 @@ class LocationExtractor:
             lat_match = re.search(lat_pattern, block, re.IGNORECASE)
             
             if lat_match:
+                # Capturer l'attribut source complet
+                source_attr = lat_match.group(0)
+                
                 if lon_pattern is None:
                     # Coordonnées combinées
                     coords_text = lat_match.group(1).strip()
@@ -282,11 +288,11 @@ class LocationExtractor:
                     # Essayer d'extraire les coordonnées du texte mixte
                     extracted_coords = self.extract_coordinates_from_mixed_text(coords_text)
                     if extracted_coords:
-                        return extracted_coords
+                        return extracted_coords, source_attr
                         
                     # Si c'est déjà des coordonnées valides
                     if self.is_valid_coordinate(coords_text):
-                        return self._format_coordinate(coords_text)
+                        return self._format_coordinate(coords_text), source_attr
                 else:
                     # Coordonnées séparées
                     lon_match = re.search(lon_pattern, block, re.IGNORECASE)
@@ -295,9 +301,11 @@ class LocationExtractor:
                         coords = f"{lat},{lon}"
                         
                         if self.is_valid_coordinate(coords):
-                            return self._format_coordinate(coords)
+                            # Combiner les deux attributs sources
+                            source_attr = f"{lat_match.group(0)} + {lon_match.group(0)}"
+                            return self._format_coordinate(coords), source_attr
         
-        return None
+        return None, None
 
     def _format_coordinate(self, coord: str) -> str:
         """Standardise le format des coordonnées"""
@@ -317,21 +325,21 @@ class LocationExtractor:
         
         return coord
 
-    def extract_hapmap_location(self, block: str) -> Optional[str]:
-        """Extraction améliorée des codes de population HapMap"""
+    def extract_hapmap_location(self, block: str) -> Tuple[Optional[str], Optional[str]]:
+        """Extraction améliorée des codes de population HapMap - retourne (coordonnées, attribut_source)"""
         if not self.hapmap_population_info:
-            return None
+            return None, None
             
         pop_patterns = [
             r'<Attribute\s+[^>]*?attribute_name="population"[^>]*>([^<]+)</Attribute>',
             r'<Attribute\s+[^>]*?attribute_name="population description"[^>]*>([^<]+)</Attribute>',
-            r'<Attribute\s+[^>]*?attribute_name="ethnicity"[^>]*>([^<]+)</Attribute>',
         ]
         
         for pattern in pop_patterns:
             pop_match = re.search(pattern, block, re.IGNORECASE)
             if pop_match:
                 pop_code = pop_match.group(1).strip().upper()
+                source_attr = pop_match.group(0)
                 
                 # Recherche dans les données HapMap
                 for dataset in self.hapmap_population_info.values():
@@ -339,8 +347,63 @@ class LocationExtractor:
                         if pop_code == code or code in pop_code or pop_code in code:
                             if isinstance(info, dict) and "coordinate" in info:
                                 coords = info["coordinate"]
-                                return f"{coords[0]},{coords[1]}"
+                                return f"{coords[0]},{coords[1]}", source_attr
                             
+        return None, None
+
+    def extract_source_attribute(self, block: str, location_value: str) -> Optional[str]:
+        """Utilise un LLM pour extraire l'attribut source d'une valeur de localisation"""
+        if not location_value:
+            return None
+            
+        prompt = f"""
+You are an XML attribute extraction specialist. Given an XML block and a location value, find the EXACT XML attribute that contains this location information.
+
+TASK: Find the complete XML attribute tag that contains the location value "{location_value}"
+
+RULES:
+1. Return the COMPLETE attribute tag including all attributes and content
+2. Look for geographic location attributes like: geo_loc_name, geographic location, country, latitude, longitude, etc.
+3. The location value might be contained within the attribute content
+4. If multiple attributes contain the value, return the most specific geographic one
+5. If no matching attribute is found, return exactly: "NONE"
+
+EXAMPLE OUTPUT FORMAT:
+<Attribute attribute_name="geographic location (country and/or sea)" harmonized_name="geo_loc_name" display_name="geographic location">Iceland</Attribute>
+
+XML BLOCK:
+{block}
+
+LOCATION VALUE TO FIND: {location_value}
+
+MATCHING ATTRIBUTE:"""
+
+        try:
+            response = self.ask_ollama_with_tools(prompt, self.attr_model, [], max_retries=2)
+            if response and "response" in response:
+                result = response["response"].strip()
+                
+                # Nettoyer la réponse
+                result = re.sub(r'<think>.*?</think>', '', result, flags=re.DOTALL)
+                result = result.strip()
+                
+                if result and result.upper() != "NONE" and "<Attribute" in result:
+                    root = ET.fromstring(f"<root>{result}</root>")  # Ajout d'une racine si nécessaire
+                    attributs_uniques = set()
+                    attributs_liste = []
+
+                    for elem in root.findall(".//Attribute"):
+                        # Créer un tuple ordonné des attributs pour vérifier les doublons
+                        attr_tuple = tuple(sorted(elem.attrib.items()))
+                        if attr_tuple not in attributs_uniques:
+                            attributs_uniques.add(attr_tuple)
+                            attributs_liste.append(elem.attrib)
+                    print( result , attributs_liste)
+                    return attributs_liste
+                    
+        except Exception as e:
+            logger.error(f"Source attribute extraction failed: {e}")
+            
         return None
 
     def llm_extract_location(self, block: str) -> Optional[str]:
@@ -358,6 +421,7 @@ IGNORE:
 ✗ Sample types, body sites
 ✗ Project names, study information
 ✗ Technical metadata
+✗ Sequencing center information
 
 OUTPUT RULES:
 - Return ONLY the most specific geographic identifier found
@@ -470,23 +534,29 @@ PLACE: {place_name}
         return None
 
     def process_biosample_block(self, block: str, accession: str) -> LocationResult:
-        """Traitement complet d'un bloc BioSample"""
+        """Traitement complet d'un bloc BioSample avec extraction d'attributs sources"""
         result = LocationResult(accession=accession)
         
         # Étape 1: Extraction par regex
-        result.regex_location = self.extract_coordinates_regex(block)
-        if result.regex_location:
-            result.final_location = result.regex_location
+        regex_coords, regex_source = self.extract_coordinates_regex(block)
+        if regex_coords:
+            result.direct_location = regex_coords
+            result.direct_method = "regex"
+            result.final_location = regex_coords
             result.processing_method = "regex"
-            logger.debug(f"{accession}: Found coordinates via regex: {result.regex_location}")
+            result.source_attribute = regex_source
+            logger.debug(f"{accession}: Found coordinates via regex: {regex_coords}")
             return result
 
         # Étape 2: Tentative HapMap
-        result.hapmap_location = self.extract_hapmap_location(block)
-        if result.hapmap_location:
-            result.final_location = result.hapmap_location
+        hapmap_coords, hapmap_source = self.extract_hapmap_location(block)
+        if hapmap_coords:
+            result.direct_location = hapmap_coords
+            result.direct_method = "hapmap"
+            result.final_location = hapmap_coords
             result.processing_method = "hapmap"
-            logger.debug(f"{accession}: Found coordinates via HapMap: {result.hapmap_location}")
+            result.source_attribute = hapmap_source
+            logger.debug(f"{accession}: Found coordinates via HapMap: {hapmap_coords}")
             return result
 
         # Étape 3: Extraction LLM
@@ -509,14 +579,19 @@ PLACE: {place_name}
                     result.final_location = result.llm_location
                     result.processing_method = "llm_place"
                     logger.debug(f"{accession}: Kept place name: {result.llm_location}")
+            
+            # Extraction de l'attribut source pour la localisation LLM
+            if result.final_location:
+                result.source_attribute = self.extract_source_attribute(block, result.llm_location)
 
         return result
 
 def main():
-    parser = argparse.ArgumentParser(description="Extract location data from SRA XML with improved coordinate handling.")
+    parser = argparse.ArgumentParser(description="Extract location data from SRA XML with source attribution.")
     parser.add_argument("file", help="Input XML file path")
     parser.add_argument("--model", default="qwen2.5:7b", help="Ollama model name for general processing")
     parser.add_argument("--coord_model", default="llama3.1", help="Ollama model for coordinate resolution")
+    parser.add_argument("--attr_model", default="llama3.1", help="Ollama model for attribute extraction")
     parser.add_argument("--output", default="output.csv", help="Output CSV file path")
     parser.add_argument("--hapmap", default="script/hapmap.json", help="HapMap population data file")
     parser.add_argument("--batch_size", type=int, default=100, help="Batch size for progress reporting")
@@ -535,7 +610,7 @@ def main():
         sys.exit(1)
 
     # Initialisation de l'extracteur
-    extractor = LocationExtractor(args.model, args.coord_model, args.hapmap)
+    extractor = LocationExtractor(args.model, args.coord_model, args.attr_model, args.hapmap)
     
     # Extraction des blocs BioSample
     biosample_blocks = re.findall(r"<BioSample.*?</BioSample>", xml_data, re.DOTALL)
@@ -551,7 +626,8 @@ def main():
             writer = csv.writer(output_file)
             writer.writerow([
                 "Accession", "Final_Location", "Processing_Method", 
-                "Regex_Location", "HapMap_Location", "LLM_Location", "Resolved_Coordinates"
+                "Direct_Location", "Direct_Method", "LLM_Location", 
+                "Resolved_Coordinates", "Source_Attribute"
             ])
 
             start_time = time.time()
@@ -572,10 +648,11 @@ def main():
                         result.accession,
                         result.final_location or "",
                         result.processing_method or "",
-                        result.regex_location or "",
-                        result.hapmap_location or "",
+                        result.direct_location or "",
+                        result.direct_method or "",
                         result.llm_location or "",
-                        result.resolved_coordinates or ""
+                        result.resolved_coordinates or "",
+                        result.source_attribute or ""
                     ])
                     
                     if result.final_location:
@@ -611,3 +688,28 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+# TO DO
+#    <Attributes>
+#       <Attribute attribute_name="strain" harmonized_name="strain" display_name="strain">not applicable</Attribute>
+#       <Attribute attribute_name="isolate" harmonized_name="isolate" display_name="isolate">not applicable</Attribute>
+#       <Attribute attribute_name="breed" harmonized_name="breed" display_name="breed">not applicable</Attribute>
+#       <Attribute attribute_name="cultivar" harmonized_name="cultivar" display_name="cultivar">not applicable</Attribute>
+#       <Attribute attribute_name="ecotype" harmonized_name="ecotype" display_name="ecotype">Piscivorous</Attribute>
+#       <Attribute attribute_name="age" harmonized_name="age" display_name="age">missing</Attribute>
+#       <Attribute attribute_name="dev_stage" harmonized_name="dev_stage" display_name="development stage">mature</Attribute>
+#       <Attribute attribute_name="sex" harmonized_name="sex" display_name="sex">female</Attribute>
+#       <Attribute attribute_name="tissue" harmonized_name="tissue" display_name="tissue">fin</Attribute>
+#       <Attribute attribute_name="Lake">Marguerite</Attribute>
+#       <Attribute attribute_name="Label" harmonized_name="label" display_name="label">MA_8B</Attribute>
+#     </Attributes>
+
+# <Attribute attribute_name="INSDC center alias">1. Plate-forme Technologique Biomics - Centre de Ressources et Recherches Technologiques (C2RT), Institut Pasteur, Paris, France 2. Hub de Bioinformatique et Biostatistique - Departement Biologie Computationnelle, Institut Pasteur, 75015 Paris, France</Attribute>
+#       <Attribute attribute_name="INSDC center name">1. Plate-forme Technologique Biomics - Centre de Ressources et Recherches Technologiques (C2RT), Institut Pasteur, Paris, France 2. Hub de Bioinformatique et Biostatistique - Departement Biologie Computationnelle, Institut Pasteur, 75015 Paris, France</Attribute>
+#       <Attribute attribute_name="INSDC first public">2021-06-19T00:18:10Z</Attribute>
+#       <Attribute attribute_name="INSDC last update">2021-06-19T00:18:10Z</Attribute>
+
+# Extraire l'attribut d'opu ^proivien l'info 
+# Pour eliminer centre de sequencage 

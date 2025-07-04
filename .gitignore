@@ -4,3 +4,6 @@ test353_gemma3_12b.csv
 test353_merged.csv
 test353_mistral_latest.csv
 test353_phi4_latest.csv
+stat.py
+script/test
+script/testollama.py
