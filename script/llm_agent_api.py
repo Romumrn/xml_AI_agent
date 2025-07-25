@@ -9,6 +9,8 @@ import logging
 from typing import Optional, Dict, Any, Tuple
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
+from tqdm import tqdm
+
 
 # Configuration du logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -32,7 +34,24 @@ class LocationExtractor:
         self.coord_model = coord_model
         self.attr_model = attr_model  # Nouveau modèle pour l'extraction d'attributs
         self.hapmap_population_info = self._load_hapmap_data(hapmap_file)
+        # Initialisation du logger CSV
+        self.llm_logger = self._init_llm_logger()
         
+    def _init_llm_logger(self):
+        """Initialise le logger CSV pour les réponses LLM"""
+        log_file = "llm_responses.csv"
+        try:
+            # Ouvrir le fichier en mode append
+            f = open(log_file, 'a', newline='', encoding='utf-8')
+            writer = csv.writer(f)
+            # Écrire l'en-tête si le fichier est vide
+            if f.tell() == 0:
+                writer.writerow(["Accession", "Model", "Timestamp", "Response"])
+            return {"file": f, "writer": writer}
+        except Exception as e:
+            logger.error(f"Failed to initialize LLM logger: {e}")
+            return None
+
     def _load_hapmap_data(self, hapmap_file: str) -> Dict:
         """Charge les données HapMap de manière sécurisée"""
         try:
@@ -44,6 +63,7 @@ class LocationExtractor:
         except json.JSONDecodeError:
             logger.error(f"Invalid JSON in {hapmap_file}")
             return {}
+
 
     def extract_coordinates_from_mixed_text(self, text: str) -> Optional[str]:
         """Extrait les coordonnées d'un texte mixte (coordonnées + noms de lieux)"""
@@ -172,9 +192,8 @@ class LocationExtractor:
                 place_names.append(line)
         
         return ', '.join(place_names) if place_names else None
-
-    def ask_ollama_with_tools(self, prompt: str, model: str, tools: list, max_retries: int = 3) -> Dict[str, Any]:
-        """Version améliorée avec meilleure gestion d'erreurs"""
+    def ask_ollama_with_tools(self, prompt: str, model: str, tools: list, accession: str, max_retries: int = 3) -> Dict[str, Any]:
+        """Version améliorée avec meilleure gestion d'erreurs et logging"""
         url = "http://localhost:11434/api/generate"
         headers = {"Content-Type": "application/json"}
         payload = {
@@ -185,27 +204,69 @@ class LocationExtractor:
             "tools": tools
         }
         
+        response_data = {}
         for attempt in range(max_retries):
             try:
-                response = requests.post(url, headers=headers, data=json.dumps(payload), timeout=120)
+                response = requests.post(url, headers=headers, data=json.dumps(payload), timeout=100)
                 response.raise_for_status()
-                return response.json()
-            except requests.exceptions.ConnectionError:
+                response_data = response.json()
+                break
+            except requests.exceptions.ConnectionError as e:
                 logger.error(f"Cannot connect to Ollama (attempt {attempt+1}/{max_retries})")
                 if attempt < max_retries - 1:
                     time.sleep(2 ** attempt)
-            except requests.exceptions.Timeout:
-                logger.error(f"Ollama timeout (attempt {attempt+1}/{max_retries})")
+            except requests.exceptions.Timeout as e:
+                logger.error(f"Ollama timeout (attempt {attempt+1}/{max_retries}) {e}")
                 if attempt < max_retries - 1:
                     time.sleep(2 ** attempt)
             except Exception as e:
-                logger.error(f"Ollama request failed (attempt {attempt+1}/{max_retries}): {e}")
+                logger.error(f"{accession} Ollama request failed (attempt {attempt+1}/{max_retries}): {e}")
                 if attempt < max_retries - 1:
                     time.sleep(2 ** attempt)
-                    
-        logger.error("All Ollama attempts failed")
-        return {}
+        else:
+            logger.error(f"{accession} All Ollama attempts failed")
+            response_data = {"error": "All attempts failed"}
+        
+        # Logguer la réponse dans le fichier CSV
+        
+        self._log_llm_response(accession, model, response_data)
+        return response_data
 
+    def llm_extract_location(self, block: str, accession: str) -> Optional[str]:
+        """Extraction de localisation avec LLM"""
+        prompt = f"""
+Extract ONLY geographic location information from this XML block:
+
+EXTRACT:
+✓ City, region, country names
+✓ Latitude/longitude coordinates
+✓ Geographic landmarks
+
+IGNORE:
+✗ Species names, organism information
+✗ Sample types, body sites
+✗ Project names, study information
+
+OUTPUT RULES:
+- Return ONLY the most specific geographic identifier
+- For coordinates: use decimal format (e.g., "40.7128,-74.0060")
+- For place names: use specific format (e.g., "New York, USA")
+- If no geographic information: return "NA"
+
+XML BLOCK:
+{block}
+
+GEOGRAPHIC LOCATION:"""
+
+        try:
+            response = self.ask_ollama_with_tools(prompt, self.model, [], accession, max_retries=2)
+            if response and "response" in response:
+                location = self._clean_llm_response(response["response"])
+                return location if location and location.upper() != "NA" else None
+        except Exception as e:
+            logger.error(f"LLM extraction failed for {accession}: {e}")
+        return None
+    
     def geocode_tool(self, place_name: str) -> Optional[str]:
         """Version améliorée qui évite le géocodage de coordonnées valides"""
         if not place_name or place_name.lower() in ['na', 'n/a', 'unknown']:
@@ -325,6 +386,26 @@ class LocationExtractor:
         
         return coord
 
+    def _log_llm_response(self, accession: str, model: str, response: dict):
+        """Journalise les réponses LLM dans un fichier CSV (méthode interne)"""
+        if not self.llm_logger:
+            return
+            
+        try:
+            timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+            response_text = response.get("response", str(response))  # Capture aussi les erreurs
+            cleaned_response = response_text.replace("\n", "\\n").replace("\r", "").replace("\t", " ")
+            
+            self.llm_logger["writer"].writerow([
+                accession,
+                model,
+                timestamp,
+                cleaned_response[:10000]  # Limite la taille pour éviter les débordements
+            ])
+            self.llm_logger["file"].flush()
+        except Exception as e:
+            logger.error(f"Failed to log LLM response for {accession}: {e}")
+
     def extract_hapmap_location(self, block: str) -> Tuple[Optional[str], Optional[str]]:
         """Extraction améliorée des codes de population HapMap - retourne (coordonnées, attribut_source)"""
         if not self.hapmap_population_info:
@@ -350,8 +431,8 @@ class LocationExtractor:
                                 return f"{coords[0]},{coords[1]}", source_attr
                             
         return None, None
-
-    def extract_source_attribute(self, block: str, location_value: str) -> Optional[str]:
+    
+    def extract_source_attribute(self, block: str, location_value: str, accession: str) -> Optional[str]:
         """Utilise un LLM pour extraire l'attribut source d'une valeur de localisation"""
         if not location_value:
             return None
@@ -378,71 +459,19 @@ LOCATION VALUE TO FIND: {location_value}
 
 MATCHING ATTRIBUTE:"""
 
-        try:
-            response = self.ask_ollama_with_tools(prompt, self.attr_model, [], max_retries=2)
-            if response and "response" in response:
-                result = response["response"].strip()
-                
-                # Nettoyer la réponse
-                result = re.sub(r'<think>.*?</think>', '', result, flags=re.DOTALL)
-                result = result.strip()
-                
-                if result and result.upper() != "NONE" and "<Attribute" in result:
-                    root = ET.fromstring(f"<root>{result}</root>")  # Ajout d'une racine si nécessaire
-                    attributs_uniques = set()
-                    attributs_liste = []
-
-                    for elem in root.findall(".//Attribute"):
-                        # Créer un tuple ordonné des attributs pour vérifier les doublons
-                        attr_tuple = tuple(sorted(elem.attrib.items()))
-                        if attr_tuple not in attributs_uniques:
-                            attributs_uniques.add(attr_tuple)
-                            attributs_liste.append(elem.attrib)
-                    print( result , attributs_liste)
-                    return attributs_liste
-                    
-        except Exception as e:
-            logger.error(f"Source attribute extraction failed: {e}")
+        response = self.ask_ollama_with_tools(prompt, self.attr_model, [], accession, max_retries=2)
+        if response and "response" in response:
+            result = response["response"].strip()
             
+            # Nettoyer la réponse
+            result = re.sub(r'<think>.*?</think>', '', result, flags=re.DOTALL)
+            result = result.strip()
+            
+            if result and result.upper() != "NONE" and "<Attribute" in result:
+                pattern = r'<Attribute\b[^>]*>.*?</Attribute>'
+                return re.findall(pattern, result, flags=re.DOTALL)
         return None
 
-    def llm_extract_location(self, block: str) -> Optional[str]:
-        """Version améliorée de l'extraction LLM avec prompt optimisé"""
-        prompt = f"""
-You are a specialized geographic data extraction assistant. Analyze this XML block and extract ONLY geographic location information.
-
-EXTRACT:
-✓ City, region, country names
-✓ Latitude/longitude coordinates (any format)
-✓ Geographic landmarks or areas
-
-IGNORE:
-✗ Species names, organism information
-✗ Sample types, body sites
-✗ Project names, study information
-✗ Technical metadata
-✗ Sequencing center information
-
-OUTPUT RULES:
-- Return ONLY the most specific geographic identifier found
-- For coordinates: use decimal format (e.g., "40.7128,-74.0060")
-- For place names: use the most specific available (e.g., "New York, USA" not just "USA")
-- If no geographic information exists, return exactly: "NA"
-
-XML BLOCK:
-{block}
-
-GEOGRAPHIC LOCATION:"""
-
-        try:
-            response = self.ask_ollama_with_tools(prompt, self.model, [], max_retries=2)
-            if response and "response" in response:
-                location = self._clean_llm_response(response["response"])
-                return location if location and location.upper() != "NA" else None
-        except Exception as e:
-            logger.error(f"LLM extraction failed: {e}")
-            
-        return None
 
     def _clean_llm_response(self, response: str) -> Optional[str]:
         """Nettoyage amélioré des réponses LLM"""
@@ -465,8 +494,7 @@ GEOGRAPHIC LOCATION:"""
             return None
             
         return response if response else None
-
-    def resolve_place_to_coordinates(self, place_name: str) -> Optional[str]:
+    def resolve_place_to_coordinates(self, place_name: str, accession: str) -> Optional[str]:
         """Version améliorée de la résolution de lieu en coordonnées"""
         if not place_name or place_name.lower() in ['na', 'n/a']:
             return None
@@ -514,7 +542,7 @@ PLACE: {place_name}
 """
 
         try:
-            resp = self.ask_ollama_with_tools(prompt, self.coord_model, tools=[llm_geocode_tool])
+            resp = self.ask_ollama_with_tools(prompt, self.coord_model, tools=[llm_geocode_tool], accession=accession)
             
             # Vérification des appels d'outils
             if resp.get("tool_calls"):
@@ -560,7 +588,7 @@ PLACE: {place_name}
             return result
 
         # Étape 3: Extraction LLM
-        result.llm_location = self.llm_extract_location(block)
+        result.llm_location = self.llm_extract_location(block, accession)
         if result.llm_location:
             # Tentative de résolution en coordonnées
             if self.is_valid_coordinate(result.llm_location):
@@ -569,7 +597,7 @@ PLACE: {place_name}
                 logger.debug(f"{accession}: LLM returned direct coordinates: {result.llm_location}")
             else:
                 # Résolution de lieu en coordonnées
-                result.resolved_coordinates = self.resolve_place_to_coordinates(result.llm_location)
+                result.resolved_coordinates = self.resolve_place_to_coordinates(result.llm_location, accession)
                 if result.resolved_coordinates:
                     result.final_location = result.resolved_coordinates
                     result.processing_method = "llm_resolved"
@@ -582,16 +610,26 @@ PLACE: {place_name}
             
             # Extraction de l'attribut source pour la localisation LLM
             if result.final_location:
-                result.source_attribute = self.extract_source_attribute(block, result.llm_location)
-
+                result.source_attribute = self.extract_source_attribute(block, result.llm_location, accession)
+            
+            
         return result
+
+    def __del__(self):
+        """Ferme proprement le fichier de log à la destruction"""
+        if hasattr(self, 'llm_logger') and self.llm_logger:
+            try:
+                self.llm_logger["file"].close()
+            except Exception as e:
+                logger.error(f"Error closing LLM log file: {e}")
+
 
 def main():
     parser = argparse.ArgumentParser(description="Extract location data from SRA XML with source attribution.")
     parser.add_argument("file", help="Input XML file path")
     parser.add_argument("--model", default="qwen2.5:7b", help="Ollama model name for general processing")
-    parser.add_argument("--coord_model", default="llama3.1", help="Ollama model for coordinate resolution")
-    parser.add_argument("--attr_model", default="llama3.1", help="Ollama model for attribute extraction")
+    parser.add_argument("--coord_model", default="mistral", help="Ollama model for coordinate resolution")
+    parser.add_argument("--attr_model", default="mistral", help="Ollama model for attribute extraction")
     parser.add_argument("--output", default="output.csv", help="Output CSV file path")
     parser.add_argument("--hapmap", default="script/hapmap.json", help="HapMap population data file")
     parser.add_argument("--batch_size", type=int, default=100, help="Batch size for progress reporting")
@@ -621,95 +659,56 @@ def main():
         sys.exit(1)
 
     # Traitement et écriture des résultats
-    try:
-        with open(args.output, "w", newline='', encoding='utf-8') as output_file:
-            writer = csv.writer(output_file)
+    with open(args.output, "w", newline='', encoding='utf-8') as output_file:
+        writer = csv.writer(output_file)
+        writer.writerow([
+            "Accession", "Final_Location", "Processing_Method", 
+            "Direct_Location", "Direct_Method", "LLM_Location", 
+            "Resolved_Coordinates", "Source_Attribute"
+        ])
+
+        start_time = time.time()
+        processed = 0
+        successful_extractions = 0
+
+        for i, block in enumerate(tqdm(biosample_blocks, desc="Processing BioSamples"), 1):
+            accession_match = re.search(r'accession="([^"]+)"', block)
+            accession = accession_match.group(1) if accession_match else f"UNKNOWN_{i}"
+
+            result = extractor.process_biosample_block(block, accession)
+
             writer.writerow([
-                "Accession", "Final_Location", "Processing_Method", 
-                "Direct_Location", "Direct_Method", "LLM_Location", 
-                "Resolved_Coordinates", "Source_Attribute"
+                result.accession,
+                result.final_location or "",
+                result.processing_method or "",
+                result.direct_location or "",
+                result.direct_method or "",
+                result.llm_location or "",
+                result.resolved_coordinates or "",
+                json.dumps(result.source_attribute) if result.source_attribute else ""
             ])
 
-            start_time = time.time()
-            processed = 0
-            successful_extractions = 0
+            if result.final_location:
+                successful_extractions += 1
 
-            for i, block in enumerate(biosample_blocks, 1):
-                # Extraction de l'accession
-                accession_match = re.search(r'accession="([^"]+)"', block)
-                accession = accession_match.group(1) if accession_match else f"UNKNOWN_{i}"
+            processed += 1
 
-                # Traitement du bloc
-                try:
-                    result = extractor.process_biosample_block(block, accession)
-                    
-                    # Écriture du résultat
-                    writer.writerow([
-                        result.accession,
-                        result.final_location or "",
-                        result.processing_method or "",
-                        result.direct_location or "",
-                        result.direct_method or "",
-                        result.llm_location or "",
-                        result.resolved_coordinates or "",
-                        result.source_attribute or ""
-                    ])
-                    
-                    if result.final_location:
-                        successful_extractions += 1
-                        
-                    processed += 1
-                    
-                except Exception as e:
-                    logger.error(f"Error processing {accession}: {e}")
-                    # Écriture d'une ligne d'erreur
-                    writer.writerow([accession, "", "error", "", "", "", ""])
-                    processed += 1
+            # Optionally update tqdm postfix
+            if i % args.batch_size == 0 or i == len(biosample_blocks):
+                elapsed = time.time() - start_time
+                avg_time = elapsed / processed if processed > 0 else 0
+                success_rate = (successful_extractions / processed * 100) if processed > 0 else 0
 
-                # Rapport de progression
-                if i % args.batch_size == 0 or i == len(biosample_blocks):
-                    elapsed = time.time() - start_time
-                    avg_time = elapsed / processed if processed > 0 else 0
-                    success_rate = (successful_extractions / processed * 100) if processed > 0 else 0
-                    
-                    logger.info(f"Progress: {i}/{len(biosample_blocks)} blocks processed "
-                              f"({success_rate:.1f}% success rate, {avg_time:.2f}s/block)")
+                tqdm.write(f"Progress: {i}/{len(biosample_blocks)} blocks processed "
+                        f"({success_rate:.1f}% success rate, {avg_time:.2f}s/block)")
 
-            # Statistiques finales
-            total_time = time.time() - start_time
-            logger.info(f"Processing complete! {successful_extractions}/{processed} successful extractions "
-                       f"({successful_extractions/processed*100:.1f}% success rate)")
-            logger.info(f"Total processing time: {total_time:.2f}s, Average: {total_time/processed:.2f}s/block")
-            logger.info(f"Results saved to {args.output}")
+        # Final stats
+        total_time = time.time() - start_time
+        logger.info(f"Processing complete! {successful_extractions}/{processed} successful extractions "
+                f"({successful_extractions/processed*100:.1f}% success rate)")
+        logger.info(f"Total processing time: {total_time:.2f}s, Average: {total_time/processed:.2f}s/block")
+        logger.info(f"Results saved to {args.output}")
 
-    except Exception as e:
-        logger.error(f"Error writing output file: {e}")
-        sys.exit(1)
 
 if __name__ == "__main__":
     main()
-
-
-
-# TO DO
-#    <Attributes>
-#       <Attribute attribute_name="strain" harmonized_name="strain" display_name="strain">not applicable</Attribute>
-#       <Attribute attribute_name="isolate" harmonized_name="isolate" display_name="isolate">not applicable</Attribute>
-#       <Attribute attribute_name="breed" harmonized_name="breed" display_name="breed">not applicable</Attribute>
-#       <Attribute attribute_name="cultivar" harmonized_name="cultivar" display_name="cultivar">not applicable</Attribute>
-#       <Attribute attribute_name="ecotype" harmonized_name="ecotype" display_name="ecotype">Piscivorous</Attribute>
-#       <Attribute attribute_name="age" harmonized_name="age" display_name="age">missing</Attribute>
-#       <Attribute attribute_name="dev_stage" harmonized_name="dev_stage" display_name="development stage">mature</Attribute>
-#       <Attribute attribute_name="sex" harmonized_name="sex" display_name="sex">female</Attribute>
-#       <Attribute attribute_name="tissue" harmonized_name="tissue" display_name="tissue">fin</Attribute>
-#       <Attribute attribute_name="Lake">Marguerite</Attribute>
-#       <Attribute attribute_name="Label" harmonized_name="label" display_name="label">MA_8B</Attribute>
-#     </Attributes>
-
-# <Attribute attribute_name="INSDC center alias">1. Plate-forme Technologique Biomics - Centre de Ressources et Recherches Technologiques (C2RT), Institut Pasteur, Paris, France 2. Hub de Bioinformatique et Biostatistique - Departement Biologie Computationnelle, Institut Pasteur, 75015 Paris, France</Attribute>
-#       <Attribute attribute_name="INSDC center name">1. Plate-forme Technologique Biomics - Centre de Ressources et Recherches Technologiques (C2RT), Institut Pasteur, Paris, France 2. Hub de Bioinformatique et Biostatistique - Departement Biologie Computationnelle, Institut Pasteur, 75015 Paris, France</Attribute>
-#       <Attribute attribute_name="INSDC first public">2021-06-19T00:18:10Z</Attribute>
-#       <Attribute attribute_name="INSDC last update">2021-06-19T00:18:10Z</Attribute>
-
-# Extraire l'attribut d'opu ^proivien l'info 
-# Pour eliminer centre de sequencage 
