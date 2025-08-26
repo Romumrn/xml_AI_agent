@@ -7,3 +7,5 @@ test353_phi4_latest.csv
 stat.py
 script/test
 script/testollama.py
+venv/*
+
