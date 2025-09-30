@@ -1,0 +1,48 @@
+<BioSampleSet>
+<BioSample access="public" publication_date="2023-10-01T00:00:00.000" last_update="2024-02-06T09:43:05.000" submission_date="2023-10-02T08:11:44.140" id="37641603" accession="SAMEA112945745">
+<Ids>
+<Id db="BioSample" is_primary="1">SAMEA112945745</Id>
+<Id db="SRA">ERS14946325</Id>
+</Ids>
+<Description>
+<Title>Czech H inflata 1</Title>
+<Organism taxonomy_id="28002" taxonomy_name="Hexamita inflata">
+<OrganismName>Hexamita inflata</OrganismName>
+</Organism>
+<Comment>
+<Paragraph>Sample from sediments in wetland in revnice, Czech Republic</Paragraph>
+</Comment>
+</Description>
+<Owner>
+<Name>EBI</Name>
+</Owner>
+<Models>
+<Model>Generic</Model>
+</Models>
+<Package display_name="Generic">Generic.1.0</Package>
+<Attributes>
+<Attribute attribute_name="ENA-CHECKLIST">ERC000011</Attribute>
+<Attribute attribute_name="ENA-FIRST-PUBLIC">2023-10-01T00:31:41Z</Attribute>
+<Attribute attribute_name="ENA-LAST-UPDATE">2023-12-20T00:26:51Z</Attribute>
+<Attribute attribute_name="External Id">SAMEA112945745</Attribute>
+<Attribute attribute_name="INSDC center name">UPPSALA UNIVERISTY</Attribute>
+<Attribute attribute_name="INSDC first public">2023-10-01T00:31:41Z</Attribute>
+<Attribute attribute_name="INSDC last update">2023-12-20T00:26:51Z</Attribute>
+<Attribute attribute_name="INSDC status">public</Attribute>
+<Attribute attribute_name="Submitter Id">Honzas H. Inflata</Attribute>
+<Attribute attribute_name="broad-scale environmental context" harmonized_name="env_broad_scale" display_name="broad-scale environmental context">Wetland area, shallow water</Attribute>
+<Attribute attribute_name="collection date" harmonized_name="collection_date" display_name="collection date">1989</Attribute>
+<Attribute attribute_name="depth" harmonized_name="depth" display_name="depth">1m</Attribute>
+<Attribute attribute_name="elevation" harmonized_name="elev" display_name="elevation">218m</Attribute>
+<Attribute attribute_name="environmental medium" harmonized_name="env_medium" display_name="environmental medium">sediments</Attribute>
+<Attribute attribute_name="geographic location (country and/or sea)" harmonized_name="geo_loc_name" display_name="geographic location">Czech Republic</Attribute>
+<Attribute attribute_name="geographic location (latitude)">49.913889</Attribute>
+<Attribute attribute_name="geographic location (longitude)">14.235833</Attribute>
+<Attribute attribute_name="local environmental context">Wetland area in Revnice</Attribute>
+<Attribute attribute_name="project name" harmonized_name="project_name" display_name="project name">H inflata genome</Attribute>
+<Attribute attribute_name="sample name" harmonized_name="sample_name" display_name="sample name">Honzas H. Inflata</Attribute>
+<Attribute attribute_name="scientific_name">Hexamita inflata</Attribute>
+</Attributes>
+<Status status="live" when="2023-10-03T08:07:08"/>
+</BioSample>
+</BioSampleSet>

@@ -227,41 +227,138 @@ Extract ONLY the most specific geographic identifier from this XML block.
 
 ## Observations
 
-### Modèle `llama3.1:8b`
+### llama3.1:8b
 
-* **Comportement mixte** :
+####  Comportement :
 
-  * Souvent génère du **code Python ou JSON dans `message.content`** → pas exploitable directement.
-  * Parfois produit un vrai `tool_call`, mais rarement.
-* **Exemple mauvais** (pas de tool call, juste du texte) :
+Mélange de code Python/JSON brut dans message.content (inexploitable).
 
-  ```
-  message=Message(role='assistant', content='...Python code...', tool_calls=None)
-  → Résultat final: NA
-  ```
-* **Exemple correct mais échec géocodage** :
+Génère parfois des tool_calls, mais peu fiables.
 
-  ```
-  tool_calls=[ToolCall(function=Function(name='get_coordinate',
-                                         arguments={'place_name': 'C57BL/6J Male P56 Mouse Brain, USA'}))]
-  → Geocoding: NA
-  ```
+####  Résultats :
 
-### Modèle `gpt-oss:20b`
+Beaucoup de NA → incapacité à isoler correctement des lieux.
 
-* **Comportement plus stable** :
+Quand ça marche, arrive à renvoyer des lieux plausibles (ex: Peru).
 
-  * Produit des `tool_calls` propres et exploitables.
-  * Capable de traiter villes, régions, et pays.
-* **Exemple réussi** :
+####  Limite :
 
-  ```
-  tool_calls=[ToolCall(function=Function(name='get_coordinate',
-                                         arguments={'place_name': 'Davis, CA'}))]
-  → Geocoding: {'latitude': 38.5435526, 'longitude': -121.739005, 'LLM_place_found': 'Davis, CA'}
-  ```
-* **Exemple fallback NA** (pas d’info géographique) :
+N’arrive pas à séparer entités biologiques des lieux → faux positifs fréquents.
 
-  ```
-  message=Message(role='assistant', content='NA', tool_calls=None)
-  ```
+### gpt-oss:20b
+
+#### Comportement :
+
+Stable dans l’usage des tool_calls.
+
+Fait des get_coordinate propres avec des lieux clairs (Davis, CA, Shenyang, China).
+
+####  Résultats :
+
+Bonne couverture : Davis, Mauritius, Peru, Shenyang, etc.
+
+Parfois retourne directement des coordonnées déjà en entrée ("44.3599167,5.1302223").
+
+Quelques NA quand le texte est bruité.
+
+####  Limite :
+
+Légèrement plus lent (temps moyen ≈ 5–10s).
+
+Tendance à inventer des localisations approximatives (Shimla, India au lieu de Peru).
+
+### qwen3:8b
+
+####  Comportement :
+
+Produit souvent des résultats, parfois plusieurs coordonnées pour un seul échantillon.
+
+Plus bavard et incertain.
+
+####  Résultats :
+
+Correct pour UC Davis, Cambridge, Shenyang, Peru.
+
+Beaucoup de temps de calcul (30–50s sur certains cas).
+
+Résultats incohérents ou multiples (deux lat/lon pour SAMEA6018323).
+
+####  Limite :
+
+Trop lent pour du traitement massif.
+
+Moins stable que gpt-oss:20b.
+
+### deepseek-r1:latest
+
+####  Comportement :
+
+⚠️ Ne supporte pas les tools → tout est NA.
+
+####  Résultats :
+
+Toujours vide, aucun appel fonctionnel.
+
+####  Limite :
+
+Inutilisable dans ce pipeline.
+
+### mistral-nemo:latest
+
+####  Comportement :
+
+Très efficace : produit de bons tool_calls et lieux pertinents.
+
+####  Résultats :
+
+Repère correctement : Guangzhou, Michigan, Davis, Cambridge, Mauritius, Peru, New York, Qingdao.
+
+Rapidité excellente (1–3s en moyenne).
+
+Rarement des NA.
+
+####  Limite :
+
+Peut généraliser trop (ex: New York, USA pour plusieurs échantillons distincts).
+
+### granite3.1-moe:3b
+
+####  Comportement :
+
+Quasi toujours NA.
+
+####  Résultats :
+
+Ne déduit rien d’exploitable.
+
+####  Limite :
+
+Trop faible pour l’extraction géographique.
+
+🔹 phi4-mini:3.8b
+
+####  Comportement :
+
+Comme granite3.1-moe, retourne principalement NA.
+
+####  Résultats :
+
+Aucun lieu significatif détecté.
+
+####  Limite :
+
+Inutilisable pour ce cas.
+
+### llama3-groq-tool-use:8b
+
+####  Comportement :
+
+Bien qu’indiqué comme tool-use, il n’arrive pas à générer de vrais tool_calls.
+
+####  Résultats :
+
+Toujours NA dans cette tâche.
+
+####  Limite :
+
+Mauvaise intégration avec Ollama tools.
