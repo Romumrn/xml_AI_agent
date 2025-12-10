@@ -1,11 +1,7 @@
 output.csv
-test353_gemma3_4b.csv
-test353_gemma3_12b.csv
-test353_merged.csv
-test353_mistral_latest.csv
-test353_phi4_latest.csv
+test*
 stat.py
 script/test
 script/testollama.py
 venv/*
-
+result*
