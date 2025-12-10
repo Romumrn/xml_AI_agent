@@ -1,183 +1,186 @@
-# **xml_AI_agent**
 
-### **Context**
+# **xml_AI_agent — LLM-Based Geographic Extraction from SRA XML**
 
-**Virome@tlas** aims to build a global cloud-based platform for viral surveillance, integrating large-scale sequencing and geographic data to monitor virus diversity, hosts, and environments. As part of this project, we focus on parsing massive SRA files to extract meaningful geographic information for epidemiological analysis.
+## **Context**
 
-### ❗ **Problem**
+**Virome@tlas** is a global cloud platform for viral surveillance, integrating large-scale sequencing datasets with geographic metadata to better understand virus diversity, host ecology, and environmental context. A major component of the pipeline is extracting precise geographic locations from SRA BioSample XML files.
 
-SRA (`.xml`) files often contain poorly annotated or inconsistent geographic location fields. Location information may be:
-- **Missing or incomplete** (e.g., "NA", "not provided")
-- **Incorrectly formatted** (e.g., coordinates in wrong fields)
-- **Inconsistent formats** (e.g., decimal degrees vs. DMS notation)
-- **Mixed with other data** (e.g., coordinates embedded in text)
-- **Encoded as population codes** (e.g., HapMap population identifiers)
+While SRA metadata contains potentially valuable location information, it is often **incomplete, inconsistent, or deeply embedded in unstructured text**. This project provides a fully automated agent-powered pipeline to extract, validate, standardize, and geocode geographic information from raw XML data.
 
-### 🔎 **Example data**
+---
 
-The tool handles various location formats found in SRA XML files:
+# **The Problem**
 
-**Coordinates with mixed latitude/longitude:**
+SRA XML metadata suffers from:
+
+* **Inconsistent formats**
+
+  * `"USA: Oregon"`
+  * `"40° 12' 10'' N 72° W"`
+  * `"32.167 N 64.50 W"`
+* **Missing or incorrect fields**
+
+  * `"NA"`
+  * wrong field for latitude/longitude
+* **Location embedded in unstructured text**
+
+  * `"Collected near Lake George, Uganda during expedition..."`
+* **Institution names used as proxies**
+
+  * `"University of California, Davis"`
+* **Complex biological metadata mixed with geographic info**
+* **Population codes**
+
+  * `"CEU"`, `"TSI"`, etc. (not handled yet)
+
+Classical regex-based extraction cannot reliably handle this diversity.
+**Large Language Models (LLMs) can.**
+
+---
+
+# **Solution: Agentic LLM-Based Geographic Extraction**
+
+This project uses a **local LLM controlled by an agent** to interpret and extract geographic information from BioSample XML.
+The agent collaborates with two executable tools:
+
+### 🔧 **1. `check_coordinate(coord)`**
+
+Validates latitude/longitude extracted from raw text.
+
+### 🌍 **2. `get_coordinate(place)`**
+
+Geocodes place names into decimal coordinates (Nominatim).
+
+# **Agent Architecture**
+
+```
+BioSample XML Block
+        ↓
+   LLM Agent (Ollama)
+        ↓
+Parses → identifies → decides to call tools  
+        ↓
+ ┌───────────────────────────────┐
+ │ Tool Calls (function calling) │
+ │  - check_coordinate            │
+ │  - get_coordinate              │
+ └───────────────────────────────┘
+        ↓
+ Normalization & JSON repair
+        ↓
+ Final structured geographic output
+```
+
+### Key capabilities
+
+* Extract the **most specific geographic entity** (city > region > country)
+* Validate any coordinate structure
+* Convert place names to canonical coordinates
+* Output **strict JSON**, even when LLM output is messy
+* Process **each BioSample independently in a spawned subprocess**
+  → Stability + parallelism-friendly
+
+---
+
+# **Example XML **
+
+### Coordinates in mixed formats
+
 ```xml
 <Attribute attribute_name="Longitude">60 16' 10'' N</Attribute>
 <Attribute attribute_name="Latitude">5 13' 20'' E</Attribute>
 ```
 
-**Combined coordinate fields:**
+### Combined coordinate fields
+
 ```xml
-<Attribute attribute_name="lat_lon" harmonized_name="lat_lon" display_name="latitude and longitude">32.167 N 64.50 W</Attribute>
+<Attribute attribute_name="lat_lon">32.167 N 64.50 W</Attribute>
 ```
 
-**Geographic location names:**
+### Geographic names
+
 ```xml
-<Attribute attribute_name="geo_loc_name" harmonized_name="geo_loc_name" display_name="geographic location">USA: Oregon</Attribute>
+<Attribute attribute_name="geo_loc_name">USA: Oregon</Attribute>
 ```
 
-**Incomplete or missing data:**
+### Institutions / landmarks
+
 ```xml
-<Attribute attribute_name="geo_loc_name" harmonized_name="geo_loc_name" display_name="geographic location">Kenya: Shimoni</Attribute>
-<Attribute attribute_name="lat_lon" harmonized_name="lat_lon" display_name="latitude and longitude">NA</Attribute>
+<Attribute attribute_name="isolation_source">University of Michigan</Attribute>
 ```
 
-**Population codes (HapMap):**
+### Missing or malformed fields
+
 ```xml
-<Attribute attribute_name="population">CEU</Attribute>
+<Attribute attribute_name="lat_lon">NA</Attribute>
 ```
 
-### 💡 **Solution**
+# 🚀 **Quick Start**
 
-This project uses a **multi-layered approach** combining:
-1. **Regex pattern matching** for structured coordinate formats
-2. **HapMap population lookup** for known population codes (???)
-3. **Large Language Model (LLM)** for complex text analysis
-4. **Geocoding services** for place name resolution
-5. **Coordinate validation** for data quality assurance
+## 1. Install Ollama
 
-## 🤖 **Why use an LLM?**
-
-Large Language Models excel at understanding context and extracting structured information from unstructured text, making them ideal for parsing inconsistent XML annotations.
-
-✅ **Advantages**
-* Handles complex, inconsistent data formats
-* Understands context and relationships between fields
-* Automates complex extraction tasks
-* Adapts to various annotation styles
-* Enables natural language interaction
-
-⚠ **Considerations**
-* Requires local deployment (Ollama) for data privacy
-* Processing time depends on model size and complexity
-* May require fine-tuning for specific domains
-* Resource-intensive for large datasets
-
-## 🏗️ **Architecture**
-(LATER)
-
-## 🚀 **Quick Start**
-
-### Prerequisites
-
-1. **Install Ollama** (for local LLM deployment)
 ```bash
 curl -fsSL https://ollama.ai/install.sh | sh
 ```
 
-2. **Pull required models**
+## 2. Pull models
+
 ```bash
-ollama pull qwen2.5:7b
-ollama pull llama3.1
-ollama pull ...
+ollama pull llama3.1:8b
+ollama pull gpt-oss:20b
+ollama pull mistral-nemo:12b
 ```
 
-### Installation
+## 3. Create environment
 
-1. **Clone the repository**
 ```bash
-git clone https://github.com/Romumrn/xml_AI_agent
-cd xml_AI_agent
-```
-
-2. **Create virtual environment**
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-3. **Install dependencies**
-```bash
+python3 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Basic Usage
+## 4. Run extraction
 
 ```bash
-# Extract locations from SRA XML file
-python script/llm_agent_api.py SRA_biosamples.xml --model gemma3:12b
+python script/llm_agent_api.py \
+  --input data_test/Dataset_test_biosample.xml \
+  --model gpt-oss:20b \
+  --output biosample_gptoss.csv
 ```
 
-## 📊 **Processing Pipeline**
 
-The tool follows a hierarchical extraction strategy:
+# **Output Format**
 
-1. **Direct Extraction** (Regex + HapMap)
-   - Pattern matching for coordinate formats
-   - HapMap population code lookup
-   - Fast, deterministic results
+| Column           | Description                     |
+| ---------------- | ------------------------------- |
+| `accession`      | SRA BioSample accession         |
+| `model`          | LLM used                        |
+| `latitude`       | Decimal latitude (if available) |
+| `longitude`      | Decimal longitude               |
+| `place`          | Most specific name extracted    |
+| `execution_time` | Runtime per block               |
 
-2. **LLM Analysis** (when direct methods fail)
-   - Context-aware text analysis
-   - Extraction of place names and coordinates
-   - Handling of complex, unstructured data
+Example:
 
-3. **Geocoding Resolution**
-   - Place name to coordinate conversion
-   - Validation and standardization
-   - Geographic data enrichment
+```
+SAMN21498129,gpt-oss:20b,23.0195,113.4100,"Jinan University",0.33
+```
 
-4. **Quality Assurance**
-   - Coordinate validation (-90/90, -180/180)
-   - Format standardization
-   - Source attribution tracking
+---
 
-## 📈 **Output Format**
+# 🧪 **Evaluation Pipeline**
 
-Results are saved as CSV with the following columns:
+A dedicated script benchmarks multiple models and compares their results against ground truth.
 
-| Column | Description |
-|--------|-------------|
-| `Accession` | SRA accession number |
-| `Final_Location` | Best available location (coordinates or place name) |
-| `Processing_Method` | Method used (regex, hapmap, llm_direct, llm_resolved, etc.) |
-| `Direct_Location` | Result from direct extraction (regex/hapmap) |
-| `Direct_Method` | Direct extraction method used |
-| `LLM_Location` | LLM-extracted location |
-| `Resolved_Coordinates` | Geocoded coordinates from place names |
-| `Source_Attribute` | Source XML attribute(s) |
+### Run all models + evaluate
 
+```bash
+python batch_llm_eval.py
+```
+... 
 
-## 🤝 **Contributing**
+# Futur
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 **License**
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🐛 **Known Issues & Limitations**
-
-- Large XML files may require significant processing time
-- LLM accuracy depends on model quality and prompt engineering
-- Geocoding services have rate limits (1 request/second for Nominatim)
-- Some complex coordinate formats may not be recognized
-- HapMap coverage is limited to specific populations
-
-## 📊 **Performance Metrics**
-
-...
-## 🔮 **Future Enhancements**
-
-...
+* Improve Prompt
+* Validate result 
+* ...
