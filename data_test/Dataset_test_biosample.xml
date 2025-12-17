@@ -640,6 +640,46 @@
     <Status status="live" when="2017-10-23T09:20:53.319" />
   </BioSample>
 
+<BioSample access="public" publication_date="2023-07-07T00:00:00.000" last_update="2023-07-10T20:51:09.697" submission_date="2023-05-14T18:10:12.760" id="35081498" accession="SAMN35081498">
+    <Ids>
+      <Id db="BioSample" is_primary="1">SAMN35081498</Id>
+      <Id db="SRA">SRS17667145</Id>
+      <Id db="GEO">GSM7342714</Id>
+    </Ids>
+    <Description>
+      <Title>HBA_220610_H1930004_CX47_GPe_3C_1_P7-4-L3-D20</Title>
+      <Organism taxonomy_id="9606" taxonomy_name="Homo sapiens">
+        <OrganismName>Homo sapiens</OrganismName>
+      </Organism>
+    </Description>
+    <Owner>
+      <Name>Ecker lab, Genomic Analysis Laboratory, HHMI-Salk-Institute</Name>
+      <Contacts>
+        <Contact>
+          <Name>
+            <First>Joseph</First>
+            <Last>Ecker</Last>
+          </Name>
+        </Contact>
+      </Contacts>
+    </Owner>
+    <Models>
+      <Model>Generic</Model>
+    </Models>
+    <Package display_name="Generic">Generic.1.0</Package>
+    <Attributes>
+      <Attribute attribute_name="source_name" harmonized_name="source_name" display_name="source name">h1930004</Attribute>
+      <Attribute attribute_name="brain region">GPe</Attribute>
+      <Attribute attribute_name="gender" harmonized_name="sex" display_name="sex">male</Attribute>
+      <Attribute attribute_name="geo_loc_name" harmonized_name="geo_loc_name" display_name="geographic location">missing</Attribute>
+      <Attribute attribute_name="collection_date" harmonized_name="collection_date" display_name="collection date">missing</Attribute>
+    </Attributes>
+    <Links>
+      <Link type="url" label="GEO Sample GSM7342714">https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM7342714</Link>
+      <Link type="entrez" target="bioproject" label="PRJNA972455">972455</Link>
+    </Links>
+    <Status status="live" when="2023-07-05T01:50:20.900" />
+  </BioSample>
 
 <BioSample access="public" publication_date="2018-11-13T00:00:00.000" last_update="2021-08-20T22:55:41.000" submission_date="2018-11-14T08:08:32.800" id="10418126" accession="SAMEA104420194">
     <Ids>
@@ -861,3 +901,400 @@
     <Status status="live" when="2023-04-18T00:41:08.593" />
   </BioSample>
 
+<BioSample access="public" publication_date="2017-04-28T00:00:00.000" last_update="2024-02-03T12:05:04.000" submission_date="2017-04-29T11:05:45.020" id="6849812" accession="SAMEA104027497">
+    <Ids>
+      <Id db="BioSample" is_primary="1">SAMEA104027497</Id>
+      <Id db="SRA">ERS1691390</Id>
+    </Ids>
+    <Description>
+      <Title>Escherichia coli ECOR-45x</Title>
+      <Organism taxonomy_id="562" taxonomy_name="Escherichia coli">
+        <OrganismName>Escherichia coli</OrganismName>
+      </Organism>
+      <Comment>
+        <Paragraph>Escherichia coli ECOR-45x</Paragraph>
+      </Comment>
+    </Description>
+    <Owner>
+      <Name>EBI</Name>
+    </Owner>
+    <Models>
+      <Model>Generic</Model>
+    </Models>
+    <Package display_name="Generic">Generic.1.0</Package>
+    <Attributes>
+      <Attribute attribute_name="ENA-CHECKLIST">ERC000011</Attribute>
+      <Attribute attribute_name="ENA-FIRST-PUBLIC">2017-04-28T17:01:34Z</Attribute>
+      <Attribute attribute_name="ENA-LAST-UPDATE">2017-04-25T13:15:18Z</Attribute>
+      <Attribute attribute_name="External Id">SAMEA104027497</Attribute>
+      <Attribute attribute_name="INSDC center name">EMBL EUROPEAN BIOINFORMATICS INSTITUTE</Attribute>
+      <Attribute attribute_name="INSDC first public">2017-04-28T17:01:34Z</Attribute>
+      <Attribute attribute_name="INSDC last update">2017-04-25T13:15:18Z</Attribute>
+      <Attribute attribute_name="INSDC status">public</Attribute>
+      <Attribute attribute_name="Submitter Id">NT12061</Attribute>
+      <Attribute attribute_name="sample name" harmonized_name="sample_name" display_name="sample name">NT12061</Attribute>
+      <Attribute attribute_name="scientific_name">Escherichia coli</Attribute>
+      <Attribute attribute_name="strain" harmonized_name="strain" display_name="strain">ECOR-45x</Attribute>
+    </Attributes>
+    <Status status="live" when="2017-04-29T12:07:29.300" />
+  </BioSample>
+
+<BioSample access="public" publication_date="2020-01-12T00:00:00.000" last_update="2024-02-06T20:43:29.000" submission_date="2020-01-15T08:07:22.340" id="13865705" accession="SAMEA6448186">
+    <Ids>
+      <Id db="BioSample" is_primary="1">SAMEA6448186</Id>
+      <Id db="SRA">ERS4213746</Id>
+    </Ids>
+    <Description>
+      <Title>MN22032</Title>
+      <Organism taxonomy_id="381124" taxonomy_name="Zea mays subsp. mays">
+        <OrganismName>Zea mays subsp. mays</OrganismName>
+      </Organism>
+      <Comment>
+        <Paragraph>Protocols: Samples from 10 tissues throughout development were collected to generate expression evidence for gene annotation. Two biological replicates were collected for each tissue type, and each replicate consisted of three individual plants. The tissues that were sampled were: 1) primary root at six days after planting; 2) shoot and coleoptile at six days after planting; 3) base of the 10th leaf at the Vegetative 11 (V11) growth stage; 4) middle of the 10th leaf at the V11 growth stage; 5) tip of the 10th leaf at the V11 growth stage; 6) meiotic tassel at the Vegetative 18 (V18) growth stage; 7) immature ear at the V18 growth stage; 8) anthers at the Reproductive 1 (R1) growth stage; 9) endosperm at 16 days after pollination; and 10) embryo at 16 days after pollination. Tissue from developmental stage V11 and older were taken from field-grown plants while all younger tissue samples were taken from greenhouse-grown plants. For the endosperm and embryo samples, tissue from 50 kernels per plant (150 total per biological replicate) were sampled. Greenhouse-grown plants were planted in Metro-Mix300 (Sun Gro Horticulture) with no additional fertilizer and grown under greenhouse conditions (27°C/24°C day/night and 16h/8h light/dark) at the University of Minnesota Plant Growth Facilities. Field grown plants were planted at the Minnesota Agricultural Experiment Station located in Saint Paul, MN with 30-inch row spacing at ~52,000 plants per hectare. RNA was extracted using the Qiagen RNeasy plant mini kit following the manufacturer's suggested protocol. The quality of the total RNA was assessed by Bioanalyzer or Fragment analyzer to determine RNA concentration and integrity. The sample concentration was normalized in 25 uL of nuclease-free H2O before library preparation. Libraries were prepared using KAPA’s stranded mRNA-seq kit with halved reaction volumes. During library preparations, mRNA was selected using oligo-dT beads, the RNA was fragmented, and cDNA was generated using random hexamer priming. Single or dual indices were ligated depending on the desired level of multiplexing. The number of cycles for library PCR was determined based on kit recommendations for the amount of total RNA used during library preparation. Libraries were quality control checked using Qubit or plate reader, depending on the number of samples in the batch for library concentration, and fragment analyzer for the size distribution of the library. The pooling of samples was based on qPCR. The pooled libraries were then checked by Qubit, Fragment Analyzer, and qPCR.</Paragraph>
+      </Comment>
+    </Description>
+    <Owner>
+      <Name>EBI</Name>
+    </Owner>
+    <Models>
+      <Model>Generic</Model>
+    </Models>
+    <Package display_name="Generic">Generic.1.0</Package>
+    <Attributes>
+      <Attribute attribute_name="ENA-CHECKLIST">ERC000011</Attribute>
+      <Attribute attribute_name="ENA-FIRST-PUBLIC">2020-01-12T04:03:17Z</Attribute>
+      <Attribute attribute_name="ENA-LAST-UPDATE">2020-01-02T13:38:43Z</Attribute>
+      <Attribute attribute_name="External Id">SAMEA6448186</Attribute>
+      <Attribute attribute_name="INSDC center name">MaizeGDB USDA-ARS</Attribute>
+      <Attribute attribute_name="INSDC first public">2020-01-12T04:03:17Z</Attribute>
+      <Attribute attribute_name="INSDC last update">2020-01-02T13:38:43Z</Attribute>
+      <Attribute attribute_name="INSDC status">public</Attribute>
+      <Attribute attribute_name="Submitter Id">E-MTAB-8633:MN22032</Attribute>
+      <Attribute attribute_name="age" harmonized_name="age" display_name="age">76</Attribute>
+      <Attribute attribute_name="broker name">ArrayExpress</Attribute>
+      <Attribute attribute_name="common name">maize</Attribute>
+      <Attribute attribute_name="cultivar" harmonized_name="cultivar" display_name="cultivar">NC358</Attribute>
+      <Attribute attribute_name="developmental stage" harmonized_name="dev_stage" display_name="development stage">LP.11 eleven leaves visible stage</Attribute>
+      <Attribute attribute_name="genotype" harmonized_name="genotype" display_name="genotype">wild type genotype</Attribute>
+      <Attribute attribute_name="growth condition">green house study</Attribute>
+      <Attribute attribute_name="organism part" harmonized_name="tissue" display_name="tissue">leaf base</Attribute>
+      <Attribute attribute_name="sample name" harmonized_name="sample_name" display_name="sample name">E-MTAB-8633:MN22032</Attribute>
+      <Attribute attribute_name="scientific_name">Zea mays subsp. mays</Attribute>
+      <Attribute attribute_name="sub_species" harmonized_name="sub_species" display_name="sub species">mays</Attribute>
+    </Attributes>
+    <Status status="live" when="2020-01-16T08:05:48.747" />
+  </BioSample>
+
+<BioSample access="public" publication_date="2022-08-31T00:00:00.000" last_update="2022-08-31T05:39:30.421" submission_date="2021-04-28T00:10:14.923" id="18894158" accession="SAMN18894158">
+    <Ids>
+      <Id db="BioSample" is_primary="1">SAMN18894158</Id>
+      <Id db_label="Sample name">Plate20-C2-TN-7C</Id>
+      <Id db="SRA">SRS8788641</Id>
+    </Ids>
+    <Description>
+      <Title>Model organism or animal sample from Drosophila melanogaster</Title>
+      <Organism taxonomy_id="7227" taxonomy_name="Drosophila melanogaster">
+        <OrganismName>Drosophila melanogaster</OrganismName>
+      </Organism>
+    </Description>
+    <Owner>
+      <Name>Princeton University</Name>
+      <Contacts>
+        <Contact>
+          <Name>
+            <First>Luisa</First>
+            <Last>Pallares</Last>
+            <Middle>F</Middle>
+          </Name>
+        </Contact>
+      </Contacts>
+    </Owner>
+    <Models>
+      <Model>Model organism or animal</Model>
+    </Models>
+    <Package display_name="Model organism or animal; version 1.0">Model.organism.animal.1.0</Package>
+    <Attributes>
+      <Attribute attribute_name="strain" harmonized_name="strain" display_name="strain">outbred from Princeton,Nj</Attribute>
+      <Attribute attribute_name="isolate" harmonized_name="isolate" display_name="isolate">Plate20-C2-TN-7C</Attribute>
+      <Attribute attribute_name="breed" harmonized_name="breed" display_name="breed">not applicable</Attribute>
+      <Attribute attribute_name="cultivar" harmonized_name="cultivar" display_name="cultivar">not applicable</Attribute>
+      <Attribute attribute_name="ecotype" harmonized_name="ecotype" display_name="ecotype">not applicable</Attribute>
+      <Attribute attribute_name="dev_stage" harmonized_name="dev_stage" display_name="development stage">adult</Attribute>
+      <Attribute attribute_name="sex" harmonized_name="sex" display_name="sex">male</Attribute>
+      <Attribute attribute_name="tissue" harmonized_name="tissue" display_name="tissue">whole fly</Attribute>
+      <Attribute attribute_name="treatment" harmonized_name="treatment" display_name="treatment">control diet</Attribute>
+      <Attribute attribute_name="cage">CageA</Attribute>
+      <Attribute attribute_name="timepoint_proxyForAge">10</Attribute>
+      <Attribute attribute_name="sequencingbatch">1</Attribute>
+    </Attributes>
+    <Links />
+    <Status status="live" when="2022-08-31T05:39:30.421" />
+  </BioSample>
+
+<BioSample access="public" publication_date="2018-11-20T00:00:00.000" last_update="2024-02-06T11:10:54.000" submission_date="2018-11-23T08:18:40.286" id="10469496" accession="SAMEA4806978">
+    <Ids>
+      <Id db="BioSample" is_primary="1">SAMEA4806978</Id>
+      <Id db="SRA">ERS2626887</Id>
+    </Ids>
+    <Description>
+      <Title>4321STDY7595982</Title>
+      <Organism taxonomy_id="5833" taxonomy_name="Plasmodium falciparum">
+        <OrganismName>Plasmodium falciparum</OrganismName>
+      </Organism>
+    </Description>
+    <Owner>
+      <Name>EBI</Name>
+    </Owner>
+    <Models>
+      <Model>Generic</Model>
+    </Models>
+    <Package display_name="Generic">Generic.1.0</Package>
+    <Attributes>
+      <Attribute attribute_name="ArrayExpress-SPECIES">Plasmodium falciparum</Attribute>
+      <Attribute attribute_name="ENA-CHECKLIST">ERC000011</Attribute>
+      <Attribute attribute_name="ENA-FIRST-PUBLIC">2018-11-20T17:04:00Z</Attribute>
+      <Attribute attribute_name="ENA-LAST-UPDATE">2018-07-27T11:07:26Z</Attribute>
+      <Attribute attribute_name="External Id">SAMEA4806978</Attribute>
+      <Attribute attribute_name="INSDC center name">SC</Attribute>
+      <Attribute attribute_name="INSDC first public">2018-11-20T17:04:00Z</Attribute>
+      <Attribute attribute_name="INSDC last update">2018-07-27T11:07:26Z</Attribute>
+      <Attribute attribute_name="INSDC status">public</Attribute>
+      <Attribute attribute_name="Submitter Id">3a2d07ba-8f2b-11e8-aee2-3c4a9275d6c8</Attribute>
+      <Attribute attribute_name="common name">malaria parasite P. falciparum</Attribute>
+      <Attribute attribute_name="sample name" harmonized_name="sample_name" display_name="sample name">3a2d07ba-8f2b-11e8-aee2-3c4a9275d6c8</Attribute>
+      <Attribute attribute_name="scientific_name">Plasmodium falciparum</Attribute>
+      <Attribute attribute_name="subject id">4321STDY7595982</Attribute>
+    </Attributes>
+    <Status status="live" when="2018-11-23T11:09:25.907" />
+  </BioSample>
+
+  <BioSample access="public" publication_date="2021-03-05T00:50:11.687" last_update="2021-03-05T00:50:11.687" submission_date="2021-03-01T01:15:12.333" id="18091297" accession="SAMN18091297">
+    <Ids>
+      <Id db="BioSample" is_primary="1">SAMN18091297</Id>
+      <Id db_label="Sample name">patient5</Id>
+      <Id db="SRA">SRS8338922</Id>
+    </Ids>
+    <Description>
+      <Title>DXHQ</Title>
+      <Organism taxonomy_id="9606" taxonomy_name="Homo sapiens">
+        <OrganismName>Homo sapiens</OrganismName>
+      </Organism>
+    </Description>
+    <Owner>
+      <Name>Huazhong University of Science and Technology</Name>
+      <Contacts>
+        <Contact>
+          <Name>
+            <First>rong</First>
+            <Last>li</Last>
+          </Name>
+        </Contact>
+      </Contacts>
+    </Owner>
+    <Models>
+      <Model>Human</Model>
+    </Models>
+    <Package display_name="Human; version 1.0">Human.1.0</Package>
+    <Attributes>
+      <Attribute attribute_name="isolate" harmonized_name="isolate" display_name="isolate">patient5</Attribute>
+      <Attribute attribute_name="age" harmonized_name="age" display_name="age">63</Attribute>
+      <Attribute attribute_name="biomaterial_provider" harmonized_name="biomaterial_provider" display_name="biomaterial provider">LR</Attribute>
+      <Attribute attribute_name="sex" harmonized_name="sex" display_name="sex">male</Attribute>
+      <Attribute attribute_name="tissue" harmonized_name="tissue" display_name="tissue">gut</Attribute>
+    </Attributes>
+    <Links>
+      <Link type="entrez" target="bioproject" label="PRJNA705529">705529</Link>
+    </Links>
+    <Status status="live" when="2021-03-05T00:50:11.687" />
+  </BioSample>
+
+  <BioSample access="public" publication_date="2018-07-14T00:00:00.000" last_update="2024-02-06T10:53:44.000" submission_date="2018-07-15T08:11:51.566" id="9661465" accession="SAMEA4773120">
+    <Ids>
+      <Id db="BioSample" is_primary="1">SAMEA4773120</Id>
+      <Id db="SRA">ERS2593074</Id>
+    </Ids>
+    <Description>
+      <Title>phi11-WT-30-C</Title>
+      <Organism taxonomy_id="1280" taxonomy_name="Staphylococcus aureus">
+        <OrganismName>Staphylococcus aureus</OrganismName>
+      </Organism>
+      <Comment>
+        <Paragraph>Transcriptome</Paragraph>
+      </Comment>
+    </Description>
+    <Owner>
+      <Name>EBI</Name>
+    </Owner>
+    <Models>
+      <Model>Generic</Model>
+    </Models>
+    <Package display_name="Generic">Generic.1.0</Package>
+    <Attributes>
+      <Attribute attribute_name="ENA-CHECKLIST">ERC000011</Attribute>
+      <Attribute attribute_name="ENA-FIRST-PUBLIC">2018-07-14T17:03:26Z</Attribute>
+      <Attribute attribute_name="ENA-LAST-UPDATE">2018-06-30T20:38:09Z</Attribute>
+      <Attribute attribute_name="External Id">SAMEA4773120</Attribute>
+      <Attribute attribute_name="INSDC center name">Institute of Infection, Immunity and Inflammation</Attribute>
+      <Attribute attribute_name="INSDC first public">2018-07-14T17:03:26Z</Attribute>
+      <Attribute attribute_name="INSDC last update">2018-06-30T20:38:09Z</Attribute>
+      <Attribute attribute_name="INSDC status">public</Attribute>
+      <Attribute attribute_name="Submitter Id">phi11-WT-30-C</Attribute>
+      <Attribute attribute_name="common name">Staphylococcus aureus</Attribute>
+      <Attribute attribute_name="sample name" harmonized_name="sample_name" display_name="sample name">phi11-WT-30-C</Attribute>
+      <Attribute attribute_name="scientific_name">Staphylococcus aureus</Attribute>
+    </Attributes>
+    <Status status="live" when="2018-07-16T08:15:49.040" />
+  </BioSample>
+
+
+<BioSample access="public" publication_date="2022-11-30T00:00:00.000" last_update="2025-01-08T16:16:14.768" submission_date="2022-11-30T10:11:04.390" id="31942823" accession="SAMN31942823">
+    <Ids>
+      <Id db="BioSample" is_primary="1">SAMN31942823</Id>
+      <Id db_label="Sample name">PPA20-15-A</Id>
+      <Id db="SRA">SRS15910625</Id>
+    </Ids>
+    <Description>
+      <Title>Pathogen: environmental/food/other sample from Enterococcus faecalis</Title>
+      <Organism taxonomy_id="1351" taxonomy_name="Enterococcus faecalis">
+        <OrganismName>Enterococcus faecalis</OrganismName>
+      </Organism>
+    </Description>
+    <Owner>
+      <Name abbreviation="NYS_GT">New York State GenomeTrakr</Name>
+    </Owner>
+    <Models>
+      <Model>Pathogen.env</Model>
+    </Models>
+    <Package display_name="Pathogen: environmental/food/other; version 1.0">Pathogen.env.1.0</Package>
+    <Attributes>
+      <Attribute attribute_name="strain" harmonized_name="strain" display_name="strain">PPA20-15-A</Attribute>
+      <Attribute attribute_name="collection_date" harmonized_name="collection_date" display_name="collection date">2021</Attribute>
+      <Attribute attribute_name="geo_loc_name" harmonized_name="geo_loc_name" display_name="geographic location">not provided</Attribute>
+      <Attribute attribute_name="collected_by" harmonized_name="collected_by" display_name="collected by">Pontificia Universidad Catolica de Chile Labotatory of food safety</Attribute>
+      <Attribute attribute_name="lat_lon" harmonized_name="lat_lon" display_name="latitude and longitude">missing</Attribute>
+      <Attribute attribute_name="project_name" harmonized_name="project_name" display_name="project name">GenomeTrakr; LFFM FY3</Attribute>
+      <Attribute attribute_name="sequenced_by" harmonized_name="sequenced_by" display_name="sequenced by">New York State Department of Health</Attribute>
+      <Attribute attribute_name="isolation_source" harmonized_name="isolation_source" display_name="isolation source">Raw pet food</Attribute>
+      <Attribute attribute_name="source_type" harmonized_name="source_type" display_name="source type">food</Attribute>
+      <Attribute attribute_name="food_origin" harmonized_name="food_origin" display_name="food product origin geographic location">Chile</Attribute>
+    </Attributes>
+    <Links>
+      <Link type="entrez" target="bioproject" label="PRJNA742919">742919</Link>
+    </Links>
+    <Status status="live" when="2022-11-30T10:11:04.391" />
+  </BioSample>
+
+  <BioSample access="controlled-access" publication_date="2013-09-12T03:58:21.280" last_update="2018-04-11T06:17:46.353" submission_date="2013-09-12T03:58:21.280" id="2355390" accession="SAMN02355390">
+    <Ids>
+      <Id db="BioSample" is_primary="1">SAMN02355390</Id>
+      <Id db="dbGaP" db_label="Sample name" is_hidden="1">659-id.82</Id>
+      <Id db="SRA">SRS491454</Id>
+    </Ids>
+    <Description>
+      <Title>Non-tumor DNA sample from Pouch of a human participant in the dbGaP study "Mount Sinai Hospital (MSH, Toronto, CANADA) pelvic pouch microbiome study"</Title>
+      <Organism taxonomy_id="9606" taxonomy_name="Homo sapiens" />
+    </Description>
+    <Owner>
+      <Name abbreviation="NCBI" />
+    </Owner>
+    <Models>
+      <Model>Generic</Model>
+    </Models>
+    <Package display_name="Generic">Generic.1.0</Package>
+    <Attributes>
+      <Attribute attribute_name="gap_accession" harmonized_name="gap_accession" display_name="gap accession">phs000659</Attribute>
+      <Attribute attribute_name="submitter handle" harmonized_name="submitter_handle" display_name="submitter handle">NIDDK_IlealPouch_AnalAnastomosis_GutMicrobiome</Attribute>
+      <Attribute attribute_name="biospecimen repository" harmonized_name="biospecimen_repository" display_name="biospecimen repository">NIDDK_IlealPouch_AnalAnastomosis_GutMicrobiome</Attribute>
+      <Attribute attribute_name="study name" harmonized_name="study_name" display_name="study name">Mount Sinai Hospital (MSH, Toronto, CANADA) pelvic pouch microbiome study</Attribute>
+      <Attribute attribute_name="study design" harmonized_name="study_design" display_name="study design">Case-Control</Attribute>
+      <Attribute attribute_name="biospecimen repository sample id" harmonized_name="biospecimen_repository_sample_id" display_name="biospecimen repository sample id">id.82</Attribute>
+      <Attribute attribute_name="submitted sample id" harmonized_name="submitted_sample_id" display_name="submitted sample id">id.82</Attribute>
+      <Attribute attribute_name="submitted subject id" harmonized_name="submitted_subject_id" display_name="submitted subject id">6</Attribute>
+      <Attribute attribute_name="gap_sample_id" harmonized_name="gap_sample_id" display_name="gap sample id">1061207</Attribute>
+      <Attribute attribute_name="gap_subject_id" harmonized_name="gap_subject_id" display_name="gap subject id">810234</Attribute>
+      <Attribute attribute_name="study disease" harmonized_name="study_disease" display_name="study disease">Inflammatory Bowel Diseases</Attribute>
+      <Attribute attribute_name="body site" harmonized_name="tissue" display_name="tissue">Pouch</Attribute>
+      <Attribute attribute_name="analyte type" harmonized_name="analyte_type" display_name="analyte type">DNA</Attribute>
+      <Attribute attribute_name="is tumor" harmonized_name="is_tumor" display_name="is tumor">No</Attribute>
+      <Attribute attribute_name="subject is affected" harmonized_name="subject_is_affected" display_name="subject is affected">Yes</Attribute>
+      <Attribute attribute_name="gap_consent_code" harmonized_name="gap_consent_code" display_name="gap consent code">1</Attribute>
+      <Attribute attribute_name="gap_consent_short_name" harmonized_name="gap_consent_short_name" display_name="gap consent short name">GRU</Attribute>
+    </Attributes>
+    <Status status="live" when="2018-04-10T23:04:34" />
+  </BioSample>
+
+  <BioSample access="public" publication_date="2023-02-06T00:00:00.000" last_update="2023-03-31T04:07:39.000" submission_date="2023-02-09T10:14:07.816" id="33225067" accession="SAMEA103986039">
+    <Ids>
+      <Id db="BioSample" is_primary="1">SAMEA103986039</Id>
+      <Id db="SRA">ERS1675207</Id>
+    </Ids>
+    <Description>
+      <Title>SCGC--1511_J18</Title>
+      <Organism taxonomy_id="9606" taxonomy_name="Homo sapiens">
+        <OrganismName>Homo sapiens</OrganismName>
+      </Organism>
+    </Description>
+    <Owner>
+      <Name>EBI</Name>
+    </Owner>
+    <Models>
+      <Model>Generic</Model>
+    </Models>
+    <Package display_name="Generic">Generic.1.0</Package>
+    <Attributes>
+      <Attribute attribute_name="ArrayExpress-SPECIES">Homo sapiens</Attribute>
+      <Attribute attribute_name="ENA-CHECKLIST">ERC000011</Attribute>
+      <Attribute attribute_name="ENA-FIRST-PUBLIC">2023-02-06</Attribute>
+      <Attribute attribute_name="ENA-LAST-UPDATE">2023-02-06</Attribute>
+      <Attribute attribute_name="External Id">SAMEA103986039</Attribute>
+      <Attribute attribute_name="INSDC center alias">SC</Attribute>
+      <Attribute attribute_name="INSDC center name">Wellcome Sanger Institute</Attribute>
+      <Attribute attribute_name="INSDC first public">2023-02-06T16:18:52Z</Attribute>
+      <Attribute attribute_name="INSDC last update">2023-02-06T16:18:52Z</Attribute>
+      <Attribute attribute_name="INSDC status">public</Attribute>
+      <Attribute attribute_name="SUBJECT_ID">HGII6842974</Attribute>
+      <Attribute attribute_name="Submitter Id">02ec81b0-25b2-11e7-97ed-68b599768938</Attribute>
+      <Attribute attribute_name="common name">human</Attribute>
+      <Attribute attribute_name="sample name" harmonized_name="sample_name" display_name="sample name">02ec81b0-25b2-11e7-97ed-68b599768938</Attribute>
+      <Attribute attribute_name="scientific_name">Homo sapiens</Attribute>
+    </Attributes>
+    <Status status="live" when="2023-02-09T10:14:07.819" />
+  </BioSample>
+
+  
+<BioSample access="public" publication_date="2020-01-30T00:00:00.000" last_update="2024-02-06T15:34:15.000" submission_date="2020-01-31T18:08:13.746" id="13963180" accession="SAMEA5536429">
+    <Ids>
+      <Id db="BioSample" is_primary="1">SAMEA5536429</Id>
+      <Id db="SRA">ERS3338495</Id>
+    </Ids>
+    <Description>
+      <Title>PSFexpBacteria</Title>
+      <Organism taxonomy_id="410658" taxonomy_name="soil metagenome">
+        <OrganismName>soil metagenome</OrganismName>
+      </Organism>
+    </Description>
+    <Owner>
+      <Name>EBI</Name>
+    </Owner>
+    <Models>
+      <Model>Generic</Model>
+    </Models>
+    <Package display_name="Generic">Generic.1.0</Package>
+    <Attributes>
+      <Attribute attribute_name="ENA-CHECKLIST">ERC000011</Attribute>
+      <Attribute attribute_name="ENA-FIRST-PUBLIC">2020-01-30T04:05:00Z</Attribute>
+      <Attribute attribute_name="ENA-LAST-UPDATE">2019-03-26T13:22:05Z</Attribute>
+      <Attribute attribute_name="External Id">SAMEA5536429</Attribute>
+      <Attribute attribute_name="INSDC center name">NIOO KNAW</Attribute>
+      <Attribute attribute_name="INSDC first public">2020-01-30T04:05:00Z</Attribute>
+      <Attribute attribute_name="INSDC last update">2019-03-26T13:22:05Z</Attribute>
+      <Attribute attribute_name="INSDC status">public</Attribute>
+      <Attribute attribute_name="Submitter Id">16S_47C</Attribute>
+      <Attribute attribute_name="common name">16S_47C</Attribute>
+      <Attribute attribute_name="environmental sample">Yes</Attribute>
+      <Attribute attribute_name="lat lon" harmonized_name="lat_lon" display_name="latitude and longitude">52? 04? N, 5? 45? E</Attribute>
+      <Attribute attribute_name="sample name" harmonized_name="sample_name" display_name="sample name">16S_47C</Attribute>
+      <Attribute attribute_name="scientific_name">soil metagenome</Attribute>
+    </Attributes>
+    <Status status="live" when="2020-02-01T08:13:32.410" />
+  </BioSample>

@@ -11,6 +11,8 @@ import subprocess
 import json
 import multiprocessing as mp
 import argparse
+from tqdm import tqdm
+
 
 ###############################################
 #  CHECK & INSTALL MODEL
@@ -28,7 +30,6 @@ def check_and_pull_model(model):
         model_base = model.split(":")[0]
 
         if model_base in result.stdout or model in result.stdout:
-            print(f"✓ Modèle '{model}' déjà installé")
             return True
         else:
             print(f"⚠ Modèle '{model}' non trouvé, téléchargement…")
@@ -76,6 +77,8 @@ def check_coordinate(coord):
                     "longitude": lon,
                     "place_name": coord
                 }
+            else:
+                print( "WRONG COORD ? ", coord)
         except:
             pass
     return "NA"
@@ -87,10 +90,6 @@ def check_coordinate(coord):
 ###############################################
 
 def select_best_json(text):
-    """
-    Trouve le JSON le plus gros + valide dans une réponse brute.
-    Utile si le modèle renvoie plusieurs {} ou mélange texte/JSON.
-    """
     json_candidates = re.findall(r'\{.*?\}', text, flags=re.DOTALL)
     best = None
     best_len = 0
@@ -107,17 +106,12 @@ def select_best_json(text):
 
 
 def normalize_llm_result(res):
-    """
-    Normalise toutes formes de réponses en un dict cohérent.
-    """
-
     if res is None:
         return {"latitude": None, "longitude": None, "place_name": None}
 
     if isinstance(res, str) and res.strip().lower() == "na":
         return {"latitude": None, "longitude": None, "place_name": None}
 
-    # Essayer d'extraire JSON
     if isinstance(res, str):
         json_obj = select_best_json(res)
         if json_obj:
@@ -134,7 +128,6 @@ def normalize_llm_result(res):
             "place_name": res.get("place_name") or res.get("LLM_place_found")
         }
 
-    # lat,lon brut
     if isinstance(res, str) and "," in res:
         try:
             lat, lon = res.split(",", 1)
@@ -142,7 +135,6 @@ def normalize_llm_result(res):
         except:
             pass
 
-    # nom de lieu simple
     if isinstance(res, str):
         return {"latitude": None, "longitude": None, "place_name": res.strip()}
 
@@ -156,42 +148,58 @@ def normalize_llm_result(res):
 
 def _ollama_call_worker(model, block_xml):
 
-    # Prompt APRÈS le XML = meilleur parsing (TESTÉ)
     prompt = f"""
-XML BLOCK:
 ----------------------------------------
+You are a strict information extraction system.
+
+You MUST follow the procedure exactly.
+Do NOT guess.
+Do NOT infer missing data.
+Do NOT fabricate coordinates.
+
+----------------------------------------
+INPUT XML:
 {block_xml}
 ----------------------------------------
 
-TASK:
-Extract ONLY geographic location information from this XML block, and use the function if needed 
-Or return NA if no place name found.
+PROCEDURE (MANDATORY):
 
-EXTRACT:
-✓ City, region, country names
-✓ Latitude/longitude coordinates
-✓ Geographic landmarks
+STEP 1 — DETECTION
+Scan the XML and detect geographic information ONLY:
+- Place names (city, region, country, landmark)
+- Coordinates (latitude/longitude)
 
-IGNORE:
-✗ Species names, organism information
-✗ Sample types, body sites
-✗ Project names, study information
+If NOTHING geographic is found:
+→ Return JSON with place_name="NA" and latitude=null, longitude=null
+→ STOP
 
-OUTPUT RULES:
-- Return ONLY the most specific geographic identifier
-- For coordinates: use decimal format (e.g., "40.7128,-74.0060")
-- For place names: use specific format (e.g., "City, COUNTRY")
-- If no geographic information: return "NA"
-- If you find coordinates, use check_coordinate to validate them
-- If you find place names, use get_coordinate to get coordinates
+STEP 2 — COORDINATES HANDLING
+If coordinates are explicitly present in the XML:
+→ Format them as "lat,lon"
+→ CALL check_coordinate with the coordinate
+→ Use ONLY validated coordinates in the final JSON
 
-YOU MUST RETURN STRICT JSON IN THIS FORMAT:
+STEP 3 — PLACE NAME HANDLING
+If a place name is found WITHOUT coordinates:
+→ CALL get_coordinate using the exact place name string
+→ Use the returned coordinates
+→ DO NOT invent coordinates
+
+RULES:
+- Use tools whenever required by the step
+- Never return coordinates without a tool call
+- Never call both tools for the same data
+- Return ONE most specific location only
+
+FINAL OUTPUT FORMAT (JSON ONLY):
 {{
-"place_name": "...",
-"latitude": float|null,
-"longitude": float|null
+  "place_name": "string",
+  "latitude": float|null,
+  "longitude": float|null
 }}
-Return JSON ONLY. No explanation.
+NO explanation.
+NO extra text.
+
 """
 
     return ollama.chat(
@@ -246,14 +254,12 @@ def ask_agent(block_xml, model, timeout=60):
 
     outputs = []
 
-    # Tool calls
     if response.message.tool_calls:
         for call in response.message.tool_calls:
             fname = call.function.name
             args = call.function.arguments
 
             if fname == "get_coordinate":
-                print( "get coords", args["place_name"] )
                 outputs.append(get_coordinate(args["place_name"]))
 
             elif fname == "check_coordinate":
@@ -261,7 +267,6 @@ def ask_agent(block_xml, model, timeout=60):
 
         return outputs
 
-    # Sinon texte brut
     return [response.message["content"]]
 
 
@@ -270,24 +275,36 @@ def ask_agent(block_xml, model, timeout=60):
 #  PROCESS BIOSAMPLES
 ###############################################
 
-def process_biosamples(biosamples_filename, model, writer_output_file):
-
+def process_biosamples(biosamples_filename, model, writer_output_file, log_file):
+    
     with open(biosamples_filename, "r", encoding="utf-8") as f:
         xml_data = f.read()
 
     biosample_blocks = re.findall(r"<BioSample.*?</BioSample>", xml_data, re.DOTALL)
-    print(f"Found {len(biosample_blocks)} BioSample blocks.")
+    total = len(biosample_blocks)
+
+    print(f"Found {total} BioSample blocks. Processing with model: {model}\n")
 
     exec_times = []
 
-    for i, block in enumerate(biosample_blocks, start=1):
+    for block in tqdm(biosample_blocks, desc="Processing samples", unit="sample"):
         start = time.time()
 
         acc = re.search(r'accession="([^"]+)"', block)
-        accession = acc.group(1) if acc else f"UNKNOWN_{i}"
+        accession = acc.group(1) if acc else "UNKNOWN"
 
         raw = ask_agent(block, model)
-        print( raw)
+
+        # ------ LOGGING ------
+        log_file.write("\n============================================\n")
+        log_file.write(f"ACCESSION: {accession}\n")
+        log_file.write(f"MODEL: {model}\n")
+        log_file.write("RAW MODEL OUTPUT:\n")
+        log_file.write(json.dumps(raw, indent=2, ensure_ascii=False))
+        log_file.write("\n============================================\n")
+        log_file.flush()
+        # ----------------------
+
         final = [normalize_llm_result(r) for r in raw]
 
         end = time.time()
@@ -304,9 +321,8 @@ def process_biosamples(biosamples_filename, model, writer_output_file):
                 "execution_time": f"{t:.2f}"
             })
 
-        print(f"{i}/{len(biosample_blocks)}  OK  ({t:.2f}s)")
-
-    print(f"\nMoyenne des temps : {statistics.mean(exec_times):.2f}s")
+    print(f"\nMoyenne des temps d'appel LLM : {statistics.mean(exec_times):.2f}s")
+    print(f"Temps total approx : {sum(exec_times):.1f}s\n")
 
 
 
@@ -320,26 +336,14 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Process biosamples XML file with LLM for location extraction"
     )
-    parser.add_argument(
-        "--input",
-        type=str,
-        required=True,
-        help="Path to the input XML file containing biosample data"
-    )
-    parser.add_argument(
-        "--output",
-        type=str,
-        default="biosample_results.csv",
-        help="Path to the output CSV file (default: biosample_results.csv)"
-    )
-    parser.add_argument(
-        "--model",
-        type=str,
-        default="llama3.1:8b",
-        help="Model to use for processing (default: llama3.1:8b)"
-    )
+    parser.add_argument("--input", type=str, required=True)
+    parser.add_argument("--output", type=str, default="biosample_results.csv")
+    parser.add_argument("--model", type=str, default="llama3.1:8b")
 
     args = parser.parse_args()
+
+    log_filename = args.output + ".log"
+    log_file = open(log_filename, "a", encoding="utf-8")
 
     with open(args.output, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(
@@ -349,6 +353,8 @@ if __name__ == "__main__":
         writer.writeheader()
 
         if check_and_pull_model(args.model):
-            process_biosamples(args.input, args.model, writer)
+            process_biosamples(args.input, args.model, writer, log_file)
         else:
             print("✗ Impossible d'utiliser ce modèle.")
+
+    log_file.close()
