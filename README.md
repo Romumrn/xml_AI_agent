@@ -80,9 +80,9 @@ Parses → identifies → decides to call tools
 * Process **each BioSample independently in a spawned subprocess**
   → Stability + parallelism-friendly
 
----
 
-# **Example XML **
+
+## Example XML 
 
 ### Coordinates in mixed formats
 
@@ -129,6 +129,7 @@ curl -fsSL https://ollama.ai/install.sh | sh
 ollama pull llama3.1:8b
 ollama pull gpt-oss:20b
 ollama pull mistral-nemo:12b
+...
 ```
 
 ## 3. Create environment
@@ -160,15 +161,15 @@ python script/llm_agent_api.py \
 | `place`          | Most specific name extracted    |
 | `execution_time` | Runtime per block               |
 
-Example:
 
-```
+
+**Example:**
+```csv
 SAMN21498129,gpt-oss:20b,23.0195,113.4100,"Jinan University",0.33
 ```
 
----
 
-# 🧪 **Evaluation Pipeline**
+##  Evaluation Pipeline
 
 A dedicated script benchmarks multiple models and compares their results against ground truth.
 
@@ -177,10 +178,111 @@ A dedicated script benchmarks multiple models and compares their results against
 ```bash
 python batch_llm_eval.py
 ```
-... 
 
-# Futur
+## Benchmark Results
 
-* Improve Prompt
-* Validate result 
-* ...
+### Quality Metrics Comparison
+
+| Model              | Accuracy | Precision | Recall | F1-Score | Specificity |
+|--------------------|----------|-----------|--------|----------|-------------|
+| **gpt-oss:20b**    | 53.3%    | **81.8%** | 42.9%  | **56.3%**| **77.8%**   |
+| **mistral-nemo:12b**| 46.7%   | 52.9%     | **52.9%**| 52.9%  | 38.5%       |
+| **qwen3:8b**       | 43.3%    | **100.0%**| 22.7%  | 37.0%    | **100.0%**  |
+| **cogito:8b**      | 40.0%    | **100.0%**| 18.2%  | 30.8%    | **100.0%**  |
+| **granite4:3b**    | 33.3%    | 35.7%     | 31.3%  | 33.3%    | 35.7%       |
+| **llama3.1:8b**    | 26.7%    | 25.0%     | 28.6%  | 26.7%    | 25.0%       |
+
+#### Confusion Matrix Summary
+
+| Model              | TP | TN | FP | FN |
+|--------------------|----|----|----|----|
+| **gpt-oss:20b**    | 9  | 7  | 2  | 12 |
+| **mistral-nemo:12b**| 9  | 5  | 8  | 8  |
+| **qwen3:8b**       | 5  | 8  | 0  | 17 |
+| **cogito:8b**      | 4  | 8  | 0  | 18 |
+| **granite4:3b**    | 5  | 5  | 9  | 11 |
+| **llama3.1:8b**    | 4  | 4  | 12 | 10 |
+
+**Legend:** TP = True Positives, TN = True Negatives, FP = False Positives, FN = False Negatives
+
+
+### Performance Metrics
+
+| Model              | Mean Time (s) | Median Time (s) | P95 Time (s) | Total Time (s) |
+|--------------------|---------------|-----------------|--------------|----------------|
+| **granite4:3b**    | **3.18**      | **2.90**        | **4.40**     | **95.4**       |
+| **mistral-nemo:12b**| 7.50         | 6.87            | 9.99         | 224.8          |
+| **llama3.1:8b**    | 9.03          | 4.80            | 13.62        | 270.9          |
+| **cogito:8b**      | 9.24          | 8.36            | 14.37        | 277.1          |
+| **gpt-oss:20b**    | 11.98         | 9.42            | 24.05        | 359.3          |
+| **qwen3:8b**       | 36.56         | 32.46           | 60.03        | 1096.9         |
+
+
+### Key Findings
+
+**🏆 Best Overall Model: gpt-oss:20b**
+- Highest F1-score (56.3%) and accuracy (53.3%)
+- Excellent precision (81.8%) with acceptable recall
+- Moderate processing speed (~12s per sample)
+
+**⚡ Fastest Model: granite4:3b**
+- 3.18s average per sample (3.8x faster than gpt-oss)
+- Trade-off: Lower accuracy (33.3%)
+
+**🎯 Most Conservative: qwen3:8b & cogito:8b**
+- Perfect precision (100%) but very low recall (<23%)
+- Avoid false positives but miss many valid locations
+
+**⚠️ Timeout Issues: qwen3:8b**
+- 9 timeouts out of 30 samples
+- Slowest overall (36.6s average)
+
+---
+
+## 🔬 Alternative Approaches
+
+### GLiNER (Zero-shot NER)
+
+```bash
+python script/run_with_gliner.py --input data_test/Dataset_test_biosample.xml
+```
+
+**Results:**
+- **Accuracy:** 33.3%
+- **Precision:** 66.7%
+- **Recall:** 18.2%
+- **F1-Score:** 28.6%
+- **Speed:** 0.75s per sample (16x faster than gpt-oss)
+- **Success rate:** 6/30 samples geolocalized
+
+### spaCy (Transformer-based NER)
+
+```bash
+python script/run_with_spacy.py --input data_test/Dataset_test_biosample.xml
+```
+
+**Results:**
+- **Accuracy:** 33.3%
+- **Precision:** 50.0%
+- **Recall:** 20.0%
+- **F1-Score:** 28.6%
+- **Speed:** 0.58s per sample (20x faster than gpt-oss)
+- **Success rate:** 8/30 samples geolocalized
+
+
+
+## Comparison Summary
+
+| Method            | F1-Score | Speed (s) | Best For                    |
+|-------------------|----------|-----------|------------------------------|
+| **gpt-oss:20b**   | 56.3%    | 11.98     | Highest quality extraction   |
+| **mistral-nemo**  | 52.9%    | 7.50      | Balanced quality/speed       |
+| **granite4:3b**   | 33.3%    | 3.18      | High-volume, speed priority  |
+| **spaCy**         | 28.6%    | 0.58      | Ultra-fast baseline          |
+| **GLiNER**        | 28.6%    | 0.75      | Zero-shot, no training       |
+
+---
+
+## Conclusion
+
+For the **Virome@tlas** pipeline, **gpt-oss:20b** provides the best balance of accuracy and reliability for geographic extraction from messy SRA metadata. For large-scale processing where speed is critical, **mistral-nemo:12b** offers a good compromise, while traditional NER approaches (spaCy, GLiNER) remain too limited for this complex task.
