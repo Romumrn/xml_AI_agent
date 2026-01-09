@@ -1,0 +1,190 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 1400 700"
+     width="100%"
+     overflow="hidden">
+
+  <defs>
+    <!-- Background -->
+    <linearGradient id="bgLight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f8fafc"/>
+    </linearGradient>
+
+    <!-- Gradients -->
+    <linearGradient id="gradLLM" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2dd4bf"/>
+      <stop offset="100%" stop-color="#0ea5e9"/>
+    </linearGradient>
+
+    <linearGradient id="gradNER" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#cbd5f5"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+
+    <linearGradient id="speedFast" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#fb7185"/>
+      <stop offset="100%" stop-color="#f97316"/>
+    </linearGradient>
+
+    <linearGradient id="speedSlow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#c084fc"/>
+    </linearGradient>
+
+    <!-- Glow -->
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="cardShadow">
+      <feDropShadow dx="0" dy="8" stdDeviation="12"
+                    flood-color="#000" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1400" height="1100" fill="url(#bgLight)"/>
+
+  <!-- Title -->
+  <text x="700" y="60" text-anchor="middle"
+        font-size="34" font-weight="800"
+        fill="#0f172a">
+    LLM Agents vs Traditional NER
+  </text>
+  <text x="700" y="92" text-anchor="middle"
+        font-size="16" fill="#475569">
+    Geographic Extraction Benchmark · 30 BioSamples
+  </text>
+
+  <!-- ================= GRAPH 1 ================= -->
+  <g transform="translate(80,140)">
+    <rect width="600" height="420" rx="20"
+          fill="white" filter="url(#cardShadow)"/>
+
+    <text x="300" y="36" text-anchor="middle"
+          font-size="20" font-weight="700"
+          fill="#0f172a">
+      Extraction Quality (F1-score)
+    </text>
+
+    <!-- Bars (animated) -->
+    <g font-size="12" font-weight="700" fill="white">
+
+      <!-- gpt-oss -->
+      <rect x="90" y="370" width="60" height="0" rx="8"
+            fill="url(#gradLLM)" filter="url(#softGlow)">
+        <animate attributeName="height" from="0" to="290"
+                 dur="1.2s" fill="freeze"/>
+        <animate attributeName="y" from="370" to="80"
+                 dur="1.2s" fill="freeze"/>
+      </rect>
+      <text x="120" y="70" text-anchor="middle" fill="#0f172a">56.3%</text>
+
+      <!-- mistral -->
+      <rect x="170" y="370" width="60" height="0" rx="8"
+            fill="#38bdf8">
+        <animate attributeName="height" from="0" to="265"
+                 dur="1s" begin="0.1s" fill="freeze"/>
+        <animate attributeName="y" from="370" to="105"
+                 dur="1s" begin="0.1s" fill="freeze"/>
+      </rect>
+      <text x="200" y="95" text-anchor="middle" fill="#0f172a">52.9%</text>
+
+      <!-- qwen -->
+      <rect x="250" y="370" width="60" height="0" rx="8"
+            fill="#facc15">
+        <animate attributeName="height" from="0" to="185"
+                 dur="0.9s" begin="0.2s" fill="freeze"/>
+        <animate attributeName="y" from="370" to="185"
+                 dur="0.9s" begin="0.2s" fill="freeze"/>
+      </rect>
+      <text x="280" y="175" text-anchor="middle" fill="#0f172a">37.0%</text>
+
+      <!-- granite -->
+      <rect x="330" y="370" width="60" height="0" rx="8"
+            fill="#c084fc">
+        <animate attributeName="height" from="0" to="165"
+                 dur="0.8s" begin="0.3s" fill="freeze"/>
+        <animate attributeName="y" from="370" to="205"
+                 dur="0.8s" begin="0.3s" fill="freeze"/>
+      </rect>
+      <text x="360" y="195" text-anchor="middle" fill="#0f172a">33.3%</text>
+
+      <!-- spaCy -->
+      <rect x="430" y="370" width="60" height="0" rx="8"
+            fill="url(#gradNER)">
+        <animate attributeName="height" from="0" to="140"
+                 dur="0.6s" begin="0.4s" fill="freeze"/>
+        <animate attributeName="y" from="370" to="230"
+                 dur="0.6s" begin="0.4s" fill="freeze"/>
+      </rect>
+      <text x="460" y="220" text-anchor="middle" fill="#0f172a">28.6%</text>
+
+      <!-- GLiNER -->
+      <rect x="510" y="370" width="60" height="0" rx="8"
+            fill="url(#gradNER)">
+        <animate attributeName="height" from="0" to="140"
+                 dur="0.6s" begin="0.5s" fill="freeze"/>
+        <animate attributeName="y" from="370" to="230"
+                 dur="0.6s" begin="0.5s" fill="freeze"/>
+      </rect>
+      <text x="540" y="220" text-anchor="middle" fill="#0f172a">28.6%</text>
+    </g>
+  </g>
+
+  <!-- ================= GRAPH 2 ================= -->
+  <g transform="translate(750,140)">
+    <rect width="600" height="420" rx="20"
+          fill="white" filter="url(#cardShadow)"/>
+
+    <text x="300" y="36" text-anchor="middle"
+          font-size="20" font-weight="700"
+          fill="#0f172a">
+      Processing Speed (s / sample)
+    </text>
+
+    <!-- scale: 40s → 400px -->
+    <g font-size="12" fill="#0f172a">
+
+      <text x="30" y="90">spaCy</text>
+      <rect x="150" y="75" width="0" height="24" rx="6" fill="url(#speedFast)">
+        <animate attributeName="width" from="0" to="6" dur="0.5s" fill="freeze"/>
+      </rect>
+
+      <text x="30" y="140">GLiNER</text>
+      <rect x="150" y="125" width="0" height="24" rx="6" fill="url(#speedFast)">
+        <animate attributeName="width" from="0" to="8" dur="0.6s" fill="freeze"/>
+      </rect>
+
+      <text x="30" y="190">granite4</text>
+      <rect x="150" y="175" width="0" height="24" rx="6" fill="#fb7185">
+        <animate attributeName="width" from="0" to="32" dur="0.7s" fill="freeze"/>
+      </rect>
+
+      <text x="30" y="240">mistral-nemo</text>
+      <rect x="150" y="225" width="0" height="24" rx="6" fill="#38bdf8">
+        <animate attributeName="width" from="0" to="75" dur="0.8s" fill="freeze"/>
+      </rect>
+
+      <text x="30" y="290">gpt-oss:20b</text>
+      <rect x="150" y="275" width="0" height="24" rx="6"
+            fill="url(#gradLLM)" filter="url(#softGlow)">
+        <animate attributeName="width" from="0" to="120"
+                 dur="1s" fill="freeze"/>
+      </rect>
+
+      <text x="30" y="340">qwen3:8b</text>
+      <rect x="150" y="325" width="0" height="24" rx="6"
+            fill="url(#speedSlow)">
+        <animate attributeName="width" from="0" to="366"
+                 dur="1.2s" fill="freeze"/>
+      </rect>
+    </g>
+  </g>
+
+
+</svg>

@@ -1,7 +1,6 @@
+# xml_AI_agent — LLM-Based Geographic Extraction from SRA XML
 
-# **xml_AI_agent — LLM-Based Geographic Extraction from SRA XML**
-
-## **Context**
+## Context
 
 **Virome@tlas** is a global cloud platform for viral surveillance, integrating large-scale sequencing datasets with geographic metadata to better understand virus diversity, host ecology, and environmental context. A major component of the pipeline is extracting precise geographic locations from SRA BioSample XML files.
 
@@ -9,49 +8,47 @@ While SRA metadata contains potentially valuable location information, it is oft
 
 ---
 
-# **The Problem**
+## The Problem
 
 SRA XML metadata suffers from:
 
-* **Inconsistent formats**
+- **Inconsistent formats**
+  - `"USA: Oregon"`
+  - `"40° 12' 10'' N 72° W"`
+  - `"32.167 N 64.50 W"`
 
-  * `"USA: Oregon"`
-  * `"40° 12' 10'' N 72° W"`
-  * `"32.167 N 64.50 W"`
-* **Missing or incorrect fields**
+- **Missing or incorrect fields**
+  - `"NA"`
+  - Wrong field for latitude/longitude
 
-  * `"NA"`
-  * wrong field for latitude/longitude
-* **Location embedded in unstructured text**
+- **Location embedded in unstructured text**
+  - `"Collected near Lake George, Uganda during expedition..."`
 
-  * `"Collected near Lake George, Uganda during expedition..."`
-* **Institution names used as proxies**
+- **Institution names used as proxies**
+  - `"University of California, Davis"`
 
-  * `"University of California, Davis"`
-* **Complex biological metadata mixed with geographic info**
-* **Population codes**
+- **Complex biological metadata mixed with geographic info**
 
-  * `"CEU"`, `"TSI"`, etc. (not handled yet)
+- **Population codes**
+  - `"CEU"`, `"TSI"`, etc.
 
-Classical regex-based extraction cannot reliably handle this diversity.
-**Large Language Models (LLMs) can.**
+Classical regex-based extraction cannot reliably handle this diversity. **But Large Language Models (LLMs) can.**
 
 ---
 
-# **Solution: Agentic LLM-Based Geographic Extraction**
+## Solution: Agentic LLM-Based Geographic Extraction
 
-This project uses a **local LLM controlled by an agent** to interpret and extract geographic information from BioSample XML.
-The agent collaborates with two executable tools:
+This project uses a **local LLM controlled by an agent** to interpret and extract geographic information from BioSample XML. The agent collaborates with two executable tools:
 
 ### 🔧 **1. `check_coordinate(coord)`**
-
 Validates latitude/longitude extracted from raw text.
 
 ### 🌍 **2. `get_coordinate(place)`**
-
 Geocodes place names into decimal coordinates (Nominatim).
 
-# **Agent Architecture**
+---
+
+## Agent Architecture
 
 ```
 BioSample XML Block
@@ -71,68 +68,63 @@ Parses → identifies → decides to call tools
  Final structured geographic output
 ```
 
-### Key capabilities
+### Key Capabilities
 
-* Extract the **most specific geographic entity** (city > region > country)
-* Validate any coordinate structure
-* Convert place names to canonical coordinates
-* Output **strict JSON**, even when LLM output is messy
-* Process **each BioSample independently in a spawned subprocess**
-  → Stability + parallelism-friendly
+- Extract the **most specific geographic entity** (city > region > country)
+- Validate any coordinate structure
+- Convert place names to canonical coordinates
+- Output **strict JSON**, even when LLM output is messy
+- Process **each BioSample independently in a spawned subprocess** → Stability + parallelism-friendly
 
+---
 
-
-## Example XML 
+## Example XML Formats
 
 ### Coordinates in mixed formats
-
 ```xml
 <Attribute attribute_name="Longitude">60 16' 10'' N</Attribute>
 <Attribute attribute_name="Latitude">5 13' 20'' E</Attribute>
 ```
 
 ### Combined coordinate fields
-
 ```xml
 <Attribute attribute_name="lat_lon">32.167 N 64.50 W</Attribute>
 ```
 
 ### Geographic names
-
 ```xml
 <Attribute attribute_name="geo_loc_name">USA: Oregon</Attribute>
 ```
 
 ### Institutions / landmarks
-
 ```xml
 <Attribute attribute_name="isolation_source">University of Michigan</Attribute>
 ```
 
 ### Missing or malformed fields
-
 ```xml
 <Attribute attribute_name="lat_lon">NA</Attribute>
 ```
 
-# 🚀 **Quick Start**
+---
 
-## 1. Install Ollama
+## 🚀 Quick Start
+
+### 1. Install Ollama
 
 ```bash
 curl -fsSL https://ollama.ai/install.sh | sh
 ```
 
-## 2. Pull models
+### 2. Pull models
 
 ```bash
 ollama pull llama3.1:8b
 ollama pull gpt-oss:20b
 ollama pull mistral-nemo:12b
-...
 ```
 
-## 3. Create environment
+### 3. Create environment
 
 ```bash
 python3 -m venv venv
@@ -140,7 +132,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## 4. Run extraction
+### 4. Run extraction
 
 ```bash
 python script/llm_agent_api.py \
@@ -149,8 +141,9 @@ python script/llm_agent_api.py \
   --output biosample_gptoss.csv
 ```
 
+---
 
-# **Output Format**
+## Output Format
 
 | Column           | Description                     |
 | ---------------- | ------------------------------- |
@@ -161,15 +154,14 @@ python script/llm_agent_api.py \
 | `place`          | Most specific name extracted    |
 | `execution_time` | Runtime per block               |
 
-
-
 **Example:**
 ```csv
 SAMN21498129,gpt-oss:20b,23.0195,113.4100,"Jinan University",0.33
 ```
 
+---
 
-##  Evaluation Pipeline
+## 🧪 Evaluation Pipeline
 
 A dedicated script benchmarks multiple models and compares their results against ground truth.
 
@@ -179,7 +171,11 @@ A dedicated script benchmarks multiple models and compares their results against
 python batch_llm_eval.py
 ```
 
-## Benchmark Results
+---
+
+## 📊 Benchmark Results
+
+![Benchmark Visualization](docs/benchmark_viz.svg)
 
 ### Quality Metrics Comparison
 
@@ -205,6 +201,7 @@ python batch_llm_eval.py
 
 **Legend:** TP = True Positives, TN = True Negatives, FP = False Positives, FN = False Negatives
 
+---
 
 ### Performance Metrics
 
@@ -217,6 +214,7 @@ python batch_llm_eval.py
 | **gpt-oss:20b**    | 11.98         | 9.42            | 24.05        | 359.3          |
 | **qwen3:8b**       | 36.56         | 32.46           | 60.03        | 1096.9         |
 
+---
 
 ### Key Findings
 
@@ -240,6 +238,10 @@ python batch_llm_eval.py
 ---
 
 ## 🔬 Alternative Approaches
+
+
+
+![Benchmark Visualization](docs/benchmark_othermethod.svg)
 
 ### GLiNER (Zero-shot NER)
 
@@ -269,7 +271,7 @@ python script/run_with_spacy.py --input data_test/Dataset_test_biosample.xml
 - **Speed:** 0.58s per sample (20x faster than gpt-oss)
 - **Success rate:** 8/30 samples geolocalized
 
-
+---
 
 ## Comparison Summary
 
@@ -286,3 +288,15 @@ python script/run_with_spacy.py --input data_test/Dataset_test_biosample.xml
 ## Conclusion
 
 For the **Virome@tlas** pipeline, **gpt-oss:20b** provides the best balance of accuracy and reliability for geographic extraction from messy SRA metadata. For large-scale processing where speed is critical, **mistral-nemo:12b** offers a good compromise, while traditional NER approaches (spaCy, GLiNER) remain too limited for this complex task.
+
+---
+
+## 📝 License
+
+This project is part of the Virome@tlas initiative.
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request.
