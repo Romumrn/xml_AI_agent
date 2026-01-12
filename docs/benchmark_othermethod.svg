@@ -47,7 +47,7 @@
   </defs>
 
   <!-- Background -->
-  <rect width="1400" height="1100" fill="url(#bgLight)"/>
+  <rect width="1400" height="700" fill="url(#bgLight)"/>
 
   <!-- Title -->
   <text x="700" y="60" text-anchor="middle"
@@ -62,7 +62,7 @@
 
   <!-- ================= GRAPH 1 ================= -->
   <g transform="translate(80,140)">
-    <rect width="600" height="420" rx="20"
+    <rect width="600" height="520" rx="20"
           fill="white" filter="url(#cardShadow)"/>
 
     <text x="300" y="36" text-anchor="middle"
@@ -134,11 +134,34 @@
       </rect>
       <text x="540" y="220" text-anchor="middle" fill="#0f172a">28.6%</text>
     </g>
+
+    <!-- LEGEND -->
+    <g transform="translate(20, 405)" font-size="12" fill="#334155">
+      <!-- gpt-oss -->
+      <rect x="0" y="0" width="16" height="16" rx="3" fill="url(#gradLLM)"/>
+      <text x="22" y="12" font-weight="600">gpt-oss:20b</text>
+      
+      <!-- mistral-nemo -->
+      <rect x="120" y="0" width="16" height="16" rx="3" fill="#38bdf8"/>
+      <text x="142" y="12" font-weight="600">mistral-nemo</text>
+      
+      <!-- granite4 -->
+      <rect x="250" y="0" width="16" height="16" rx="3" fill="#c084fc"/>
+      <text x="272" y="12" font-weight="600">granite4:3b</text>
+      
+      <!-- spaCy -->
+      <rect x="370" y="0" width="16" height="16" rx="3" fill="url(#gradNER)"/>
+      <text x="392" y="12" font-weight="600">spaCy</text>
+      
+      <!-- GLiNER -->
+      <rect x="460" y="0" width="16" height="16" rx="3" fill="url(#gradNER)"/>
+      <text x="482" y="12" font-weight="600">GLiNER</text>
+    </g>
   </g>
 
   <!-- ================= GRAPH 2 ================= -->
   <g transform="translate(750,140)">
-    <rect width="600" height="420" rx="20"
+    <rect width="600" height="520" rx="20"
           fill="white" filter="url(#cardShadow)"/>
 
     <text x="300" y="36" text-anchor="middle"
@@ -154,21 +177,25 @@
       <rect x="150" y="75" width="0" height="24" rx="6" fill="url(#speedFast)">
         <animate attributeName="width" from="0" to="6" dur="0.5s" fill="freeze"/>
       </rect>
+      <text x="162" y="90" font-size="11" fill="#64748b">0.6s</text>
 
       <text x="30" y="140">GLiNER</text>
       <rect x="150" y="125" width="0" height="24" rx="6" fill="url(#speedFast)">
         <animate attributeName="width" from="0" to="8" dur="0.6s" fill="freeze"/>
       </rect>
+      <text x="164" y="140" font-size="11" fill="#64748b">0.8s</text>
 
       <text x="30" y="190">granite4</text>
       <rect x="150" y="175" width="0" height="24" rx="6" fill="#fb7185">
         <animate attributeName="width" from="0" to="32" dur="0.7s" fill="freeze"/>
       </rect>
+      <text x="188" y="190" font-size="11" fill="#64748b">3.2s</text>
 
       <text x="30" y="240">mistral-nemo</text>
       <rect x="150" y="225" width="0" height="24" rx="6" fill="#38bdf8">
         <animate attributeName="width" from="0" to="75" dur="0.8s" fill="freeze"/>
       </rect>
+      <text x="231" y="240" font-size="11" fill="#64748b">7.5s</text>
 
       <text x="30" y="290">gpt-oss:20b</text>
       <rect x="150" y="275" width="0" height="24" rx="6"
@@ -176,6 +203,7 @@
         <animate attributeName="width" from="0" to="120"
                  dur="1s" fill="freeze"/>
       </rect>
+      <text x="276" y="290" font-size="11" fill="#64748b">12.0s</text>
 
       <text x="30" y="340">qwen3:8b</text>
       <rect x="150" y="325" width="0" height="24" rx="6"
@@ -183,6 +211,7 @@
         <animate attributeName="width" from="0" to="366"
                  dur="1.2s" fill="freeze"/>
       </rect>
+      <text x="522" y="340" font-size="11" fill="#64748b">36.6s</text>
     </g>
   </g>
 
